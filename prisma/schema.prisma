@@ -1,0 +1,560 @@
+// =============================================================================
+// EduManage — Prisma Schema
+// Production-ready normalized relational schema for Student Management Portal
+// =============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+
+// =============================================================================
+// ENUMS
+// =============================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// =============================================================================
+// USER & AUTH MODELS
+// =============================================================================
+
+model User {
+  id           String    @id @default(cuid())
+  name         String
+  email        String    @unique
+  username     String?   @unique
+  passwordHash String
+  role String
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  lastLoginAt  DateTime?
+
+  // Relations
+  student              Student?
+  teacher              Teacher?
+  userPermissions      UserPermission[]
+  actorAuditLogs       AuditLog[]       @relation("AuditActor")
+  notifications        Notification[]
+  passwordResetTokens  PasswordResetToken[]
+
+  @@index([email])
+  @@index([username])
+  @@index([role])
+  @@index([isActive])
+  @@map("users")
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([userId])
+  @@map("password_reset_tokens")
+}
+
+// =============================================================================
+// RBAC — ROLE & PERMISSION MODELS
+// =============================================================================
+
+model RolePermission {
+  id         String     @id @default(cuid())
+  role String
+  permission String
+  createdAt  DateTime   @default(now())
+
+  @@unique([role, permission])
+  @@index([role])
+  @@map("role_permissions")
+}
+
+model UserPermission {
+  id         String     @id @default(cuid())
+  userId     String
+  permission String
+  granted    Boolean    @default(true) // false = explicitly revoked
+  createdAt  DateTime   @default(now())
+  grantedBy  String?    // Admin user ID who granted this
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, permission])
+  @@index([userId])
+  @@map("user_permissions")
+}
+
+// =============================================================================
+// STUDENT MODELS
+// =============================================================================
+
+model Student {
+  id               String        @id @default(cuid())
+  userId           String        @unique
+  enrollmentNumber String        @unique
+  admissionNumber  String        @unique
+  admissionDate    DateTime
+  status String @default("ACTIVE")
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  // Relations
+  user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  profile       StudentProfile?
+  guardian      GuardianInfo?
+  enrollments   StudentEnrollment[]
+  marks         Mark[]
+  attendance    Attendance[]
+  documents     Document[]
+  remarks       TeacherRemark[]
+
+  @@index([enrollmentNumber])
+  @@index([admissionNumber])
+  @@index([status])
+  @@map("students")
+}
+
+model StudentProfile {
+  id          String     @id @default(cuid())
+  studentId   String     @unique
+  firstName   String
+  lastName    String
+  middleName  String?
+  dateOfBirth DateTime
+  gender String
+  bloodGroup String @default("UNKNOWN")
+  phone       String?
+  altPhone    String?
+  photoUrl    String?
+  photoPublicId String? // Cloudinary public ID for deletion
+  address     String?
+  city        String?
+  state       String?
+  postalCode  String?
+  country     String     @default("India")
+  updatedAt   DateTime   @updatedAt
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([firstName, lastName])
+  @@map("student_profiles")
+}
+
+model GuardianInfo {
+  id             String   @id @default(cuid())
+  studentId      String   @unique
+  fatherName     String?
+  fatherPhone    String?
+  fatherEmail    String?
+  fatherOccupation String?
+  motherName     String?
+  motherPhone    String?
+  motherEmail    String?
+  motherOccupation String?
+  guardianName   String?
+  guardianPhone  String?
+  guardianEmail  String?
+  guardianAddress String?
+  relationship   String?  // e.g., "Uncle", "Grandparent"
+  updatedAt      DateTime @updatedAt
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@map("guardian_info")
+}
+
+// =============================================================================
+// TEACHER MODEL
+// =============================================================================
+
+model Teacher {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  employeeId      String   @unique
+  qualification   String?
+  specialization  String?
+  phone           String?
+  joiningDate     DateTime?
+  isClassTeacher  Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  user        User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  assignments TeacherAssignment[]
+  marks       Mark[]
+  attendance  Attendance[]
+  remarks     TeacherRemark[]
+
+  @@index([employeeId])
+  @@map("teachers")
+}
+
+// =============================================================================
+// ACADEMIC STRUCTURE MODELS
+// =============================================================================
+
+model AcademicSession {
+  id          String   @id @default(cuid())
+  name        String   @unique // e.g. "2025-2026"
+  startDate   DateTime
+  endDate     DateTime
+  isCurrent   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  enrollments       StudentEnrollment[]
+  teacherAssignments TeacherAssignment[]
+  examinations      Examination[]
+  attendance        Attendance[]
+
+  @@index([isCurrent])
+  @@map("academic_sessions")
+}
+
+model Class {
+  id          String   @id @default(cuid())
+  name        String   @unique // e.g. "Class 9"
+  displayOrder Int     @default(0)
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  sections  Section[]
+
+  @@map("classes")
+}
+
+model Section {
+  id          String   @id @default(cuid())
+  name        String   // e.g. "A", "B"
+  classId     String
+  capacity    Int?     @default(40)
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  class              Class               @relation(fields: [classId], references: [id], onDelete: Restrict)
+  enrollments        StudentEnrollment[]
+  teacherAssignments TeacherAssignment[]
+  attendance         Attendance[]
+
+  @@unique([classId, name])
+  @@index([classId])
+  @@map("sections")
+}
+
+model Subject {
+  id          String   @id @default(cuid())
+  name        String
+  code        String   @unique // e.g. "MATH101"
+  description String?
+  isElective  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  teacherAssignments  TeacherAssignment[]
+  examinationSubjects ExaminationSubject[]
+  marks               Mark[]
+  attendance          Attendance[]
+
+  @@index([code])
+  @@map("subjects")
+}
+
+// =============================================================================
+// ENROLLMENT & ASSIGNMENT MODELS
+// =============================================================================
+
+model StudentEnrollment {
+  id                String   @id @default(cuid())
+  studentId         String
+  sectionId         String
+  academicSessionId String
+  rollNumber        String?
+  isActive          Boolean  @default(true)
+  enrolledAt        DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relations
+  student         Student         @relation(fields: [studentId], references: [id], onDelete: Restrict)
+  section         Section         @relation(fields: [sectionId], references: [id], onDelete: Restrict)
+  academicSession AcademicSession @relation(fields: [academicSessionId], references: [id], onDelete: Restrict)
+
+  @@unique([studentId, academicSessionId]) // One enrollment per session per student
+  @@index([studentId])
+  @@index([sectionId])
+  @@index([academicSessionId])
+  @@map("student_enrollments")
+}
+
+model TeacherAssignment {
+  id                String   @id @default(cuid())
+  teacherId         String
+  sectionId         String?
+  subjectId         String?
+  academicSessionId String
+  isClassTeacher    Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relations
+  teacher         Teacher         @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  section         Section?        @relation(fields: [sectionId], references: [id], onDelete: SetNull)
+  subject         Subject?        @relation(fields: [subjectId], references: [id], onDelete: SetNull)
+  academicSession AcademicSession @relation(fields: [academicSessionId], references: [id], onDelete: Restrict)
+
+  @@index([teacherId])
+  @@index([sectionId])
+  @@index([subjectId])
+  @@index([academicSessionId])
+  @@map("teacher_assignments")
+}
+
+// =============================================================================
+// EXAMINATION & MARKS MODELS
+// =============================================================================
+
+model Examination {
+  id                String   @id @default(cuid())
+  name              String   // e.g. "Unit Test 1", "Mid Term", "Final"
+  academicSessionId String
+  startDate         DateTime?
+  endDate           DateTime?
+  isPublished       Boolean  @default(false)
+  description       String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relations
+  academicSession     AcademicSession     @relation(fields: [academicSessionId], references: [id], onDelete: Restrict)
+  examinationSubjects ExaminationSubject[]
+  marks               Mark[]
+
+  @@index([academicSessionId])
+  @@map("examinations")
+}
+
+model ExaminationSubject {
+  id            String @id @default(cuid())
+  examinationId String
+  subjectId     String
+  maxMarks      Float
+  passingMarks  Float
+  examDate      DateTime?
+
+  // Relations
+  examination Examination @relation(fields: [examinationId], references: [id], onDelete: Cascade)
+  subject     Subject     @relation(fields: [subjectId], references: [id], onDelete: Restrict)
+
+  @@unique([examinationId, subjectId])
+  @@map("examination_subjects")
+}
+
+model Mark {
+  id             String   @id @default(cuid())
+  studentId      String
+  examinationId  String
+  subjectId      String
+  teacherId      String?  // Teacher who entered/updated the marks
+  obtainedMarks  Float?
+  maxMarks       Float
+  grade String    @default("NOT_GRADED")
+  percentage     Float?
+  remarks        String?
+  isAbsent       Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  student     Student     @relation(fields: [studentId], references: [id], onDelete: Restrict)
+  examination Examination @relation(fields: [examinationId], references: [id], onDelete: Restrict)
+  subject     Subject     @relation(fields: [subjectId], references: [id], onDelete: Restrict)
+  teacher     Teacher?    @relation(fields: [teacherId], references: [id], onDelete: SetNull)
+
+  @@unique([studentId, examinationId, subjectId])
+  @@index([studentId])
+  @@index([examinationId])
+  @@index([subjectId])
+  @@map("marks")
+}
+
+// =============================================================================
+// ATTENDANCE MODEL
+// =============================================================================
+
+model Attendance {
+  id                String           @id @default(cuid())
+  studentId         String
+  sectionId         String?
+  subjectId         String?
+  academicSessionId String
+  teacherId         String?
+  date              DateTime         
+  status String
+  remarks           String?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  // Relations
+  student         Student         @relation(fields: [studentId], references: [id], onDelete: Restrict)
+  section         Section?        @relation(fields: [sectionId], references: [id], onDelete: SetNull)
+  subject         Subject?        @relation(fields: [subjectId], references: [id], onDelete: SetNull)
+  academicSession AcademicSession @relation(fields: [academicSessionId], references: [id], onDelete: Restrict)
+  teacher         Teacher?        @relation(fields: [teacherId], references: [id], onDelete: SetNull)
+
+  @@unique([studentId, date, subjectId]) // One attendance per student per day per subject
+  @@index([studentId])
+  @@index([sectionId])
+  @@index([date])
+  @@index([academicSessionId])
+  @@map("attendance")
+}
+
+// =============================================================================
+// TEACHER REMARK MODEL
+// =============================================================================
+
+model TeacherRemark {
+  id        String   @id @default(cuid())
+  studentId String
+  teacherId String
+  title     String
+  content   String
+  isPublic  Boolean  @default(true) // visible to student
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  teacher Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+  @@index([teacherId])
+  @@map("teacher_remarks")
+}
+
+// =============================================================================
+// DOCUMENT MODEL
+// =============================================================================
+
+model Document {
+  id                  String       @id @default(cuid())
+  studentId           String
+  name                String
+  type String
+  fileUrl             String
+  publicId            String       // Cloudinary/storage public ID
+  mimeType            String
+  sizeBytes           Int
+  isVisibleToStudent  Boolean      @default(false)
+  uploadedById        String?      // User ID of uploader
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+
+  // Relations
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+  @@map("documents")
+}
+
+// =============================================================================
+// AUDIT LOG MODEL
+// =============================================================================
+
+model AuditLog {
+  id           String      @id @default(cuid())
+  actorUserId  String?
+  action String
+  entityType   String      // e.g. "Student", "Mark", "Attendance"
+  entityId     String?
+  previousData String?
+  newData String?
+  ipAddress    String?
+  userAgent    String?
+  metadata String?
+  createdAt    DateTime    @default(now())
+
+  // Relations
+  actor User? @relation("AuditActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  @@index([actorUserId])
+  @@index([action])
+  @@index([entityType])
+  @@index([entityId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+// =============================================================================
+// NOTIFICATION MODEL
+// =============================================================================
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type String
+  title     String
+  message   String
+  isRead    Boolean          @default(false)
+  metadata String?
+  createdAt DateTime         @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isRead])
+  @@map("notifications")
+}
+
+// =============================================================================
+// SYSTEM SETTINGS MODEL
+// =============================================================================
+
+model SystemSetting {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       String
+  description String?
+  isPublic    Boolean  @default(false) // if true, accessible without auth
+  updatedAt   DateTime @updatedAt
+
+  @@index([key])
+  @@map("system_settings")
+}
