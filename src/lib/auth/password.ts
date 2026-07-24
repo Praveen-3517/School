@@ -3,21 +3,16 @@
 // Industry-standard password hashing — never use MD5/SHA1/bcrypt for new code
 // =============================================================================
 
-import { hash, verify } from "@node-rs/argon2";
+import { hash, compare } from "bcryptjs";
 
-const ARGON2_OPTIONS = {
-  memoryCost: 65536, // 64 MB — OWASP recommendation
-  timeCost: 3,
-  parallelism: 4,
-  outputLen: 32,
-};
+const SALT_ROUNDS = 10;
 
 /**
  * Hash a plaintext password using Argon2id.
  * Never store the result in client-accessible state.
  */
 export async function hashPassword(password: string): Promise<string> {
-  return hash(password, ARGON2_OPTIONS);
+  return hash(password, SALT_ROUNDS);
 }
 
 /**
@@ -30,7 +25,7 @@ export async function verifyPassword(
   hashedPassword: string
 ): Promise<boolean> {
   try {
-    return await verify(hashedPassword, password, ARGON2_OPTIONS);
+    return await compare(password, hashedPassword);
   } catch {
     // Never expose hash errors — return false
     return false;

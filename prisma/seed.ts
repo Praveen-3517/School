@@ -14,14 +14,9 @@
 // =============================================================================
 
 import { prisma } from "../src/lib/db/prisma";
-import { hash } from "@node-rs/argon2";
+import { hash } from "bcryptjs";
 
-const ARGON2_OPTIONS = {
-  memoryCost: 65536,
-  timeCost: 3,
-  parallelism: 4,
-  outputLen: 32,
-};
+const SALT_ROUNDS = 10;
 
 async function main() {
   console.log("🌱 Seeding EduManage database...\n");
@@ -141,7 +136,7 @@ async function main() {
   // ============================
   // Admin User
   // ============================
-  const adminPassword = await hash("Admin@123456", ARGON2_OPTIONS);
+  const adminPassword = await hash("Admin@123456", SALT_ROUNDS);
   const adminUser = await prisma.user.create({
     data: {
       name: "System Administrator",
@@ -157,7 +152,7 @@ async function main() {
   // ============================
   // Teacher Users
   // ============================
-  const teacherPassword = await hash("Teacher@123456", ARGON2_OPTIONS);
+  const teacherPassword = await hash("Teacher@123456", SALT_ROUNDS);
 
   const teacher1User = await prisma.user.create({
     data: {
@@ -238,7 +233,7 @@ async function main() {
   // ============================
   // Student Users (10 students)
   // ============================
-  const studentPassword = await hash("Student@123456", ARGON2_OPTIONS);
+  const studentPassword = await hash("Student@123456", SALT_ROUNDS);
 
   const studentData = [
     {
