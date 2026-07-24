@@ -22,7 +22,10 @@ type LoginFormData = z.infer<typeof loginSchema>;
 function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") ?? "/";
+  let callbackUrl = searchParams.get("callbackUrl") ?? "/";
+  if (callbackUrl.includes("/api/auth/error") || callbackUrl === "/login") {
+    callbackUrl = "/";
+  }
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
