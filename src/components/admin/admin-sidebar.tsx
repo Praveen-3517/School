@@ -86,7 +86,7 @@ const NAV_ITEMS: NavItem[] = [
   },
   {
     label: "Audit Logs",
-    href: "/admin/audit-logs",
+    href: "/admin/records/audit",
     icon: ScrollText,
   },
   {

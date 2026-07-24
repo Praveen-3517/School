@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db/prisma";
 import { batchMarkEntrySchema, type BatchMarkEntryValues } from "@/lib/validation/mark";
 import { requireSession } from "@/lib/auth/session";
 import { calculateGrade } from "@/lib/academic/grading";
+import { logAuditEvent } from "@/lib/audit";
 import { revalidatePath } from "next/cache";
 
 
@@ -90,6 +91,12 @@ export async function saveMarksBatch(data: BatchMarkEntryValues) {
           });
         }
       }
+    });
+
+    await logAuditEvent({
+      action: "UPDATE",
+      entityType: "Mark",
+      newData: { examinationId, subjectId, batchSize: marks.length },
     });
 
     revalidatePath("/teacher/marks");

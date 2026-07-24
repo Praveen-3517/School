@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/db/prisma";
 import { studentSchema, type StudentFormValues } from "@/lib/validation/student";
 import { requireAdmin } from "@/lib/auth/session";
+import { logAuditEvent } from "@/lib/audit";
 import { revalidatePath } from "next/cache";
 import { hash } from "@node-rs/argon2";
 import type { Role } from "@/types/enums";
@@ -122,6 +123,12 @@ export async function createStudent(data: StudentFormValues) {
           isActive: true,
         },
       });
+    });
+
+    await logAuditEvent({
+      action: "CREATE",
+      entityType: "Student",
+      newData: { enrollmentNumber, admissionNumber, firstName, lastName, email },
     });
 
     revalidatePath("/admin/students");
