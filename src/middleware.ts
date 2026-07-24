@@ -32,6 +32,11 @@ export default auth((req: NextRequest & { auth: { user?: { role?: Role } } | nul
   const { pathname } = req.nextUrl;
   const session = req.auth;
 
+  // Allow NextAuth API routes unconditionally
+  if (pathname.startsWith("/api/auth")) {
+    return NextResponse.next();
+  }
+
   // Allow public routes
   if (PUBLIC_ROUTES.some((route) => pathname.startsWith(route))) {
     // If already logged in, redirect to dashboard
