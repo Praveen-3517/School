@@ -15,9 +15,6 @@
 
 import { prisma } from "../src/lib/db/prisma";
 import { hash } from "@node-rs/argon2";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const ARGON2_OPTIONS = {
   memoryCost: 65536,
