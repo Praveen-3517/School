@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db/prisma";
 import { teacherSchema, type TeacherFormValues } from "@/lib/validation/teacher";
 import { requireAdmin } from "@/lib/auth/session";
 import { revalidatePath } from "next/cache";
-import { hash } from "@node-rs/argon2";
+import { hashPassword } from "@/lib/auth/password";
 import type { Role } from "@/types/enums";
 
 export async function createTeacher(data: TeacherFormValues) {
@@ -33,12 +33,7 @@ export async function createTeacher(data: TeacherFormValues) {
 
     // Default password is Employee ID or a standard default
     const defaultPassword = employeeId;
-    const passwordHash = await hash(defaultPassword, {
-      memoryCost: 65536,
-      timeCost: 3,
-      outputLen: 32,
-      parallelism: 1,
-    });
+    const passwordHash = await hashPassword(defaultPassword);
 
     // Create User and Teacher in a transaction
     await prisma.$transaction(async (tx) => {
