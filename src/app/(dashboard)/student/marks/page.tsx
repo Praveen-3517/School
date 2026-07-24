@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default async function StudentMarksPage() {
   const session = await requireSession();
 
-  if (session.user.role !== "STUDENT" && session.user.role !== "PARENT") {
+  if (session.user.role !== "STUDENT") {
     redirect("/dashboard");
   }
 

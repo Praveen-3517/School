@@ -109,7 +109,7 @@ export function TeacherAssignmentForm({ teacherId, subjects, sections, currentAs
         <CardContent className="flex flex-col sm:flex-row gap-4 items-end">
           <div className="space-y-2 flex-1">
             <label className="text-sm font-medium">Subject</label>
-            <Select value={selectedSubject} onValueChange={setSelectedSubject}>
+            <Select value={selectedSubject} onValueChange={(val) => setSelectedSubject(val || "")}>
               <SelectTrigger>
                 <SelectValue placeholder="Select Subject" />
               </SelectTrigger>
@@ -122,7 +122,7 @@ export function TeacherAssignmentForm({ teacherId, subjects, sections, currentAs
           </div>
           <div className="space-y-2 flex-1">
             <label className="text-sm font-medium">Class & Section</label>
-            <Select value={selectedSection} onValueChange={setSelectedSection}>
+            <Select value={selectedSection} onValueChange={(val) => setSelectedSection(val || "")}>
               <SelectTrigger>
                 <SelectValue placeholder="Select Section" />
               </SelectTrigger>

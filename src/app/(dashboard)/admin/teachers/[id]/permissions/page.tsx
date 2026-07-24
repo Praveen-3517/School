@@ -6,6 +6,7 @@ import { TeacherPermissionsForm } from "@/components/teachers/teacher-permission
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Permission } from "@/types/enums";
 
 export const metadata: Metadata = {
   title: "Teacher Permissions | EduManage",
@@ -20,12 +21,12 @@ export default async function TeacherPermissionsPage(props: TeacherPermissionsPa
   const params = await props.params;
   await requireAdmin();
 
-  const teacher = await prisma.teacherProfile.findUnique({
+  const teacher = await prisma.teacher.findUnique({
     where: { id: params.id },
     include: {
       user: {
         include: {
-          permissions: true
+          userPermissions: true
         }
       }
     },
@@ -35,7 +36,7 @@ export default async function TeacherPermissionsPage(props: TeacherPermissionsPa
     notFound();
   }
 
-  const currentPermissions = teacher.user.permissions
+  const currentPermissions = teacher.user.userPermissions
     .filter(p => p.granted)
     .map(p => p.permission);
 
@@ -57,7 +58,7 @@ export default async function TeacherPermissionsPage(props: TeacherPermissionsPa
       <div className="max-w-3xl">
         <TeacherPermissionsForm 
           userId={teacher.userId}
-          currentPermissions={currentPermissions}
+          initialPermissions={currentPermissions as Permission[]}
         />
       </div>
     </div>

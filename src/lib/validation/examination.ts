@@ -17,7 +17,7 @@ export const examinationSchema = z.object({
     message: "Invalid end date",
   }).optional().or(z.literal("")),
   description: z.string().max(500).optional().or(z.literal("")),
-  isPublished: z.boolean().default(false),
+  isPublished: z.boolean().optional(),
   subjects: z.array(examinationSubjectSchema).min(1, "At least one subject must be added to the exam"),
 });
 

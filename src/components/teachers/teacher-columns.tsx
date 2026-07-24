@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { MoreHorizontal, ArrowUpDown } from "lucide-react";
 import {
   DropdownMenu,
@@ -94,26 +94,24 @@ export const teacherColumns: ColumnDef<TeacherTableType>[] = [
 
       return (
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
+          <DropdownMenuTrigger className={buttonVariants({ variant: "ghost", className: "h-8 w-8 p-0" })}>
+            <span className="sr-only">Open menu</span>
+            <MoreHorizontal className="h-4 w-4" />
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem asChild>
-              <Link href={`/admin/teachers/${teacher.id}`}>View Profile</Link>
+            <DropdownMenuItem render={<Link href={`/admin/teachers/${teacher.id}`} />}>
+              View Profile
             </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={`/admin/teachers/${teacher.id}/edit`}>Edit Details</Link>
+            <DropdownMenuItem render={<Link href={`/admin/teachers/${teacher.id}/edit`} />}>
+              Edit Details
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href={`/admin/teachers/${teacher.id}/assignments`}>Assignments</Link>
+            <DropdownMenuItem render={<Link href={`/admin/teachers/${teacher.id}/assignments`} />}>
+              Assignments
             </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={`/admin/teachers/${teacher.id}/permissions`}>Permissions</Link>
+            <DropdownMenuItem render={<Link href={`/admin/teachers/${teacher.id}/permissions`} />}>
+              Permissions
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

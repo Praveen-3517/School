@@ -8,7 +8,7 @@ export default async function StudentLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await requireAuth();
+  const session = await requireSession();
 
   if (session.user.role !== "STUDENT") {
     redirect("/login");

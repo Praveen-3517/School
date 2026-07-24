@@ -107,7 +107,7 @@ export default async function TeacherProfilePage(props: TeacherProfilePageProps)
               <Phone className="h-4 w-4 text-muted-foreground" />
               <div className="text-sm">
                 <p className="font-medium">Contact</p>
-                <p className="text-muted-foreground">{teacher.user.phone || "N/A"}</p>
+                <p className="text-muted-foreground">{teacher.phone || "N/A"}</p>
               </div>
             </div>
           </CardContent>
@@ -128,9 +128,9 @@ export default async function TeacherProfilePage(props: TeacherProfilePageProps)
                       <div className="flex items-center gap-3">
                         <BookOpen className="h-5 w-5 text-primary" />
                         <div>
-                          <p className="font-medium">{assignment.subject.name}</p>
+                          <p className="font-medium">{assignment.subject?.name || "Unknown Subject"}</p>
                           <p className="text-sm text-muted-foreground">
-                            Class {assignment.section.class.name} - {assignment.section.name}
+                            Class {assignment.section?.class?.name || "Unknown"} - {assignment.section?.name || "Unknown"}
                           </p>
                         </div>
                       </div>

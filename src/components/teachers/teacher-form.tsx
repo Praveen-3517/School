@@ -27,7 +27,7 @@ export function TeacherForm({ initialData }: { initialData?: Partial<TeacherForm
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<TeacherFormValues>({
-    resolver: zodResolver(teacherSchema),
+    resolver: zodResolver(teacherSchema) as any,
     defaultValues: initialData || {
       firstName: "",
       lastName: "",

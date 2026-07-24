@@ -40,7 +40,7 @@ export default async function EditTeacherPage(props: EditTeacherPageProps) {
     firstName,
     lastName,
     email: teacher.user.email,
-    phone: teacher.user.phone || "",
+    phone: teacher.phone || "",
     employeeId: teacher.employeeId,
     department: teacher.specialization || "General",
     designation: "Teacher",

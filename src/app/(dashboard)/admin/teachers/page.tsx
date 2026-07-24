@@ -54,7 +54,7 @@ export default async function TeachersPage(props: TeachersPageProps) {
       user: true,
     },
     orderBy: {
-      joinedAt: "desc",
+      createdAt: "desc",
     },
     skip,
     take: pageSize,
@@ -67,7 +67,7 @@ export default async function TeachersPage(props: TeachersPageProps) {
     id: teacher.id,
     name: teacher.user.name,
     email: teacher.user.email,
-    phone: teacher.user.phone,
+    phone: teacher.phone,
     employeeId: teacher.employeeId,
     department: teacher.specialization || "General",
     designation: "Teacher",

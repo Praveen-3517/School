@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { MoreHorizontal, ArrowUpDown } from "lucide-react";
 import {
   DropdownMenu,
@@ -37,10 +37,7 @@ export const studentColumns: ColumnDef<StudentTableType>[] = [
     id: "select",
     header: ({ table }) => (
       <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
+        checked={table.getIsAllPageRowsSelected()}
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
       />
@@ -129,11 +126,9 @@ export const studentColumns: ColumnDef<StudentTableType>[] = [
 
       return (
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
+          <DropdownMenuTrigger className={buttonVariants({ variant: "ghost", className: "h-8 w-8 p-0" })}>
+            <span className="sr-only">Open menu</span>
+            <MoreHorizontal className="h-4 w-4" />
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
@@ -143,17 +138,17 @@ export const studentColumns: ColumnDef<StudentTableType>[] = [
               Copy Enrollment No.
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href={`/admin/students/${student.id}`}>View Profile</Link>
+            <DropdownMenuItem render={<Link href={`/admin/students/${student.id}`} />}>
+              View Profile
             </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={`/admin/students/${student.id}/edit`}>Edit Details</Link>
+            <DropdownMenuItem render={<Link href={`/admin/students/${student.id}/edit`} />}>
+              Edit Details
             </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={`/admin/students/${student.id}/attendance`}>Attendance</Link>
+            <DropdownMenuItem render={<Link href={`/admin/students/${student.id}/attendance`} />}>
+              Attendance
             </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={`/admin/students/${student.id}/marks`}>Academic Marks</Link>
+            <DropdownMenuItem render={<Link href={`/admin/students/${student.id}/marks`} />}>
+              Marks
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

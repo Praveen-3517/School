@@ -74,7 +74,7 @@ export default async function TeacherAttendancePage(props: TeacherAttendancePage
     students = enrollments.map(e => ({
       id: e.studentId,
       name: e.student.user.name,
-      enrollmentNo: e.student.enrollmentNo
+        enrollmentNo: e.student.enrollmentNumber
     }));
 
     // Fetch existing attendance records for this date and subject

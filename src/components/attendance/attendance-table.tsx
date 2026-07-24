@@ -147,10 +147,10 @@ export function AttendanceTable({
                   <TableCell>
                     <Select 
                       disabled={disabled}
-                      value={entries[idx].status}
-                      onValueChange={(val) => handleStatusChange(idx, val)}
+                      value={entries[idx].status || "PRESENT"}
+                      onValueChange={(val) => handleStatusChange(idx, val || "PRESENT")}
                     >
-                      <SelectTrigger className={getStatusColor(entries[idx].status)}>
+                      <SelectTrigger className={getStatusColor(entries[idx].status || "PRESENT")}>
                         <SelectValue placeholder="Select Status" />
                       </SelectTrigger>
                       <SelectContent>

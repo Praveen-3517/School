@@ -86,7 +86,7 @@ export default async function TeacherMarksPage(props: TeacherMarksPageProps) {
       students = enrollments.map(e => ({
         id: e.studentId,
         name: e.student.user.name,
-        enrollmentNo: e.student.enrollmentNo
+        enrollmentNo: e.student.enrollmentNumber
       }));
 
       // Fetch existing marks

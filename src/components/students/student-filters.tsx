@@ -80,7 +80,7 @@ export function StudentFilters() {
       </div>
 
       <div className="w-full sm:w-[200px]">
-        <Select value={status} onValueChange={setStatus}>
+        <Select value={status} onValueChange={(val) => setStatus(val || "ALL")}>
           <SelectTrigger>
             <SelectValue placeholder="Filter by status" />
           </SelectTrigger>

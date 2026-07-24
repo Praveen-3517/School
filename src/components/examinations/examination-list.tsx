@@ -3,7 +3,7 @@
 import { Examination, AcademicSession } from "@prisma/client";
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -102,17 +102,18 @@ export function ExaminationList({ examinations }: { examinations: ExamWithDetail
                 </TableCell>
                 <TableCell className="text-right">
                   <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="h-8 w-8 p-0" disabled={processingId === exam.id}>
-                        {processingId === exam.id ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                          <>
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontal className="h-4 w-4" />
-                          </>
-                        )}
-                      </Button>
+                    <DropdownMenuTrigger 
+                      className={buttonVariants({ variant: "ghost", className: "h-8 w-8 p-0" })}
+                      disabled={processingId === exam.id}
+                    >
+                      {processingId === exam.id ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <>
+                          <span className="sr-only">Open menu</span>
+                          <MoreHorizontal className="h-4 w-4" />
+                        </>
+                      )}
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>

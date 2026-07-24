@@ -5,7 +5,7 @@ import { batchMarkEntrySchema, type BatchMarkEntryValues } from "@/lib/validatio
 import { requireSession } from "@/lib/auth/session";
 import { calculateGrade } from "@/lib/academic/grading";
 import { revalidatePath } from "next/cache";
-import { SystemPermission } from "@/types/enums";
+
 
 export async function saveMarksBatch(data: BatchMarkEntryValues) {
   try {

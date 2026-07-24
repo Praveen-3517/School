@@ -50,7 +50,6 @@ export async function createStudent(data: StudentFormValues) {
           email,
           passwordHash,
           role: "STUDENT" as Role,
-          phone: phone || null,
         },
       });
 
@@ -72,7 +71,9 @@ export async function createStudent(data: StudentFormValues) {
           firstName,
           lastName,
           dateOfBirth: new Date(dateOfBirth),
-          bloodGroup: bloodGroup || null,
+          gender: "PREFER_NOT_TO_SAY",
+          bloodGroup: bloodGroup || "UNKNOWN",
+          phone: phone || null,
           address,
         },
       });
@@ -81,10 +82,10 @@ export async function createStudent(data: StudentFormValues) {
       await tx.guardianInfo.create({
         data: {
           studentId: student.id,
-          name: guardianName,
-          relation: guardianRelation,
-          phone: guardianPhone,
-          email: guardianEmail || null,
+          guardianName: guardianName,
+          relationship: guardianRelation,
+          guardianPhone: guardianPhone,
+          guardianEmail: guardianEmail || null,
         },
       });
 
@@ -97,11 +98,27 @@ export async function createStudent(data: StudentFormValues) {
       
       if (!section) throw new Error("Section not found");
 
+      // Fetch active session
+      let academicSession = await tx.academicSession.findFirst({
+        where: { isCurrent: true }
+      });
+
+      if (!academicSession) {
+        // Fallback if no active session
+        academicSession = await tx.academicSession.findFirst({
+          orderBy: { startDate: 'desc' }
+        });
+      }
+
+      if (!academicSession) {
+        throw new Error("No academic session found in the system");
+      }
+
       await tx.studentEnrollment.create({
         data: {
           studentId: student.id,
           sectionId,
-          academicSession: "2025-2026", // In a real app, fetch active session
+          academicSessionId: academicSession.id,
           isActive: true,
         },
       });

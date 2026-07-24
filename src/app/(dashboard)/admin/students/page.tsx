@@ -9,6 +9,7 @@ import { PlusCircle, Download } from "lucide-react";
 import Link from "next/link";
 import type { StudentStatus } from "@/types/enums";
 
+
 export const metadata: Metadata = {
   title: "Student Management | EduManage",
   description: "Manage student records, admissions, and academic details.",
@@ -26,8 +27,7 @@ interface StudentsPageProps {
 }
 
 export default async function StudentsPage({ searchParams }: StudentsPageProps) {
-  // Authorization: Only users with STUDENT_VIEW permission can access this page
-  await requirePermission("STUDENT_VIEW");
+  await requireAdmin();
 
   const params = await searchParams;
   
@@ -41,8 +41,8 @@ export default async function StudentsPage({ searchParams }: StudentsPageProps) 
   
   if (params.query) {
     where.OR = [
-      { firstName: { contains: params.query } }, // Prisma SQLite uses case-sensitive by default, but we can't use mode: "insensitive" in SQLite. Wait, in standard SQLite it's case insensitive by default for ASCII.
-      { lastName: { contains: params.query } },
+      { profile: { firstName: { contains: params.query } } },
+      { profile: { lastName: { contains: params.query } } },
       { enrollmentNumber: { contains: params.query } },
       { admissionNumber: { contains: params.query } },
     ];
@@ -71,6 +71,7 @@ export default async function StudentsPage({ searchParams }: StudentsPageProps) 
           },
           take: 1, // Get only active enrollment
         },
+        profile: true,
         user: {
           select: { email: true, isActive: true }
         }
@@ -86,13 +87,13 @@ export default async function StudentsPage({ searchParams }: StudentsPageProps) 
     
     return {
       id: s.id,
-      firstName: s.firstName,
-      lastName: s.lastName,
+      firstName: s.profile?.firstName || "Unknown",
+      lastName: s.profile?.lastName || "",
       enrollmentNumber: s.enrollmentNumber,
       admissionNumber: s.admissionNumber,
-      status: s.status,
+      status: s.status as StudentStatus,
       email: s.user?.email || "N/A",
-      phone: s.phone || "N/A",
+      phone: s.profile?.phone || "N/A",
       className: activeEnrollment?.section?.class?.name || "Not Assigned",
       sectionName: activeEnrollment?.section?.name || "",
       academicSession: activeEnrollment?.academicSession?.name || "N/A",

@@ -49,7 +49,6 @@ export async function createTeacher(data: TeacherFormValues) {
           email,
           passwordHash,
           role: "TEACHER" as Role,
-          phone: phone || null,
           isActive,
         },
       });
@@ -61,6 +60,7 @@ export async function createTeacher(data: TeacherFormValues) {
           employeeId,
           qualification: "", // Add default or modify form if needed
           specialization: department, // Map department to specialization or similar
+          phone: phone || null,
           joiningDate: new Date(joinedAt),
         },
       });

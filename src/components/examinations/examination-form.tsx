@@ -51,7 +51,7 @@ export function ExaminationForm({ subjects, sessions }: ExaminationFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<ExaminationFormValues>({
-    resolver: zodResolver(examinationSchema),
+    resolver: zodResolver(examinationSchema) as any,
     defaultValues: {
       name: "",
       academicSessionId: sessions[0]?.id || "",

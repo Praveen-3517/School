@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 };
 
 export default async function TeacherDashboard() {
-  const session = await requireAuth();
+  const session = await requireSession();
 
   if (session.user.role !== "TEACHER") {
     redirect("/login");

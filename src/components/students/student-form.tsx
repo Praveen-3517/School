@@ -33,7 +33,7 @@ export function StudentForm({ initialData }: { initialData?: Partial<StudentForm
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<StudentFormValues>({
-    resolver: zodResolver(studentSchema),
+    resolver: zodResolver(studentSchema) as any,
     defaultValues: initialData || {
       firstName: "",
       lastName: "",

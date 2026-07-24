@@ -70,7 +70,7 @@ export default async function AdminMarksPage(props: AdminMarksPageProps) {
         students = enrollments.map(e => ({
           id: e.studentId,
           name: e.student.user.name,
-          enrollmentNo: e.student.enrollmentNo
+          enrollmentNumber: e.student.enrollmentNumber
         }));
 
         existingMarks = await prisma.mark.findMany({

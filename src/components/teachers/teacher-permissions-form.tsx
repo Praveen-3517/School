@@ -80,15 +80,15 @@ export function TeacherPermissionsForm({ userId, initialPermissions }: TeacherPe
         <CardContent className="space-y-6">
           <div className="grid gap-4">
             {AVAILABLE_PERMISSIONS.map((permission) => (
-              <div key={permission.id} className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow-sm">
+              <div key={permission.value} className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow-sm">
                 <Checkbox
-                  id={`perm-${permission.id}`}
-                  checked={selectedPermissions.includes(permission.id)}
-                  onCheckedChange={(checked) => handleToggle(permission.id, checked as boolean)}
+                  id={`perm-${permission.value}`}
+                  checked={selectedPermissions.includes(permission.value)}
+                  onCheckedChange={() => togglePermission(permission.value)}
                 />
                 <div className="space-y-1 leading-none">
                   <label 
-                    htmlFor={`perm-${permission.id}`}
+                    htmlFor={`perm-${permission.value}`}
                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
                     {permission.label}

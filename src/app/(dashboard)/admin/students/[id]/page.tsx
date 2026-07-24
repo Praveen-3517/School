@@ -98,7 +98,7 @@ export default async function StudentProfilePage(props: StudentProfilePageProps)
               <Phone className="h-4 w-4 text-muted-foreground" />
               <div className="text-sm">
                 <p className="font-medium">Contact</p>
-                <p className="text-muted-foreground">{student.user.phone || "N/A"}</p>
+                <p className="text-muted-foreground">{student.profile.phone || "N/A"}</p>
               </div>
             </div>
           </CardContent>
@@ -133,17 +133,17 @@ export default async function StudentProfilePage(props: StudentProfilePageProps)
               </CardHeader>
               <CardContent className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Name ({student.guardian.relation})</p>
-                  <p>{student.guardian.name}</p>
+                  <p className="text-sm font-medium text-muted-foreground">Name ({student.guardian.relationship || "Father"})</p>
+                  <p>{student.guardian.fatherName || student.guardian.guardianName || "N/A"}</p>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Phone</p>
-                  <p>{student.guardian.phone}</p>
+                  <p>{student.guardian.fatherPhone || student.guardian.guardianPhone || "N/A"}</p>
                 </div>
-                {student.guardian.email && (
+                {(student.guardian.fatherEmail || student.guardian.guardianEmail) && (
                   <div className="col-span-2">
                     <p className="text-sm font-medium text-muted-foreground">Email</p>
-                    <p>{student.guardian.email}</p>
+                    <p>{student.guardian.fatherEmail || student.guardian.guardianEmail}</p>
                   </div>
                 )}
               </CardContent>

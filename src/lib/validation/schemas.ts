@@ -146,19 +146,35 @@ export type UpdateTeacherInput = z.infer<typeof updateTeacherSchema>;
 // MARK SCHEMAS
 // =============================================================================
 
-export const createMarkSchema = z
-  .object({
-    studentId: z.string().min(1),
-    examinationId: z.string().min(1),
-    subjectId: z.string().min(1),
-    maxMarks: z.number().positive("Maximum marks must be positive"),
-    obtainedMarks: z.number().min(0, "Marks cannot be negative").optional(),
-    isAbsent: z.boolean().default(false),
-    remarks: z.string().max(1000).optional(),
-  })
+export const baseMarkSchema = z.object({
+  studentId: z.string().min(1),
+  examinationId: z.string().min(1),
+  subjectId: z.string().min(1),
+  maxMarks: z.number().positive("Maximum marks must be positive"),
+  obtainedMarks: z.number().min(0, "Marks cannot be negative").optional(),
+  isAbsent: z.boolean().default(false),
+  remarks: z.string().max(1000).optional(),
+});
+
+export const createMarkSchema = baseMarkSchema.refine(
+  (d) => {
+    if (!d.isAbsent && d.obtainedMarks !== undefined) {
+      return d.obtainedMarks <= d.maxMarks;
+    }
+    return true;
+  },
+  {
+    message: "Obtained marks cannot exceed maximum marks",
+    path: ["obtainedMarks"],
+  }
+);
+
+export const updateMarkSchema = baseMarkSchema
+  .omit({ studentId: true, examinationId: true, subjectId: true })
+  .partial()
   .refine(
     (d) => {
-      if (!d.isAbsent && d.obtainedMarks !== undefined) {
+      if (d.maxMarks !== undefined && !d.isAbsent && d.obtainedMarks !== undefined) {
         return d.obtainedMarks <= d.maxMarks;
       }
       return true;
@@ -168,10 +184,6 @@ export const createMarkSchema = z
       path: ["obtainedMarks"],
     }
   );
-
-export const updateMarkSchema = createMarkSchema
-  .omit({ studentId: true, examinationId: true, subjectId: true })
-  .partial();
 
 export type CreateMarkInput = z.infer<typeof createMarkSchema>;
 export type UpdateMarkInput = z.infer<typeof updateMarkSchema>;
