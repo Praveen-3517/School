@@ -48,6 +48,13 @@
 **Trade-offs**: None, this is the official recommended NextAuth pattern.
 **Expected impact**: `getSession()` successfully returns session data in production.
 
+### July 25, 2026
+**Decision**: Moved `jwt` and `session` callbacks from `auth.ts` to `auth.config.ts`.
+**Reason**: `middleware.ts` uses `auth.config.ts` to instantiate its edge-compatible NextAuth instance. Because the callbacks were only defined in `auth.ts` (Node runtime), the middleware was unable to read custom properties like `session.user.role` from the JWT token. This caused the middleware to constantly assume the user was unauthenticated, creating an invisible redirect loop on the frontend when attempting to log in.
+**Alternatives considered**: Passing the callbacks separately to the middleware, but moving them to the shared config is cleaner and standard practice in NextAuth v5.
+**Trade-offs**: None.
+**Expected impact**: Middleware correctly identifies user roles from JWT cookies and routes them to their dashboard after a successful login.
+
 ---
 
 ## File History
