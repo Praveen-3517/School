@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SingularityBackground } from "@/components/ui/singularity-background";
 
 export const metadata: Metadata = {
   title: "Sign In",
@@ -11,14 +12,12 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 flex items-center justify-center p-4">
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-indigo-600/20 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-600/20 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl" />
-      </div>
-      <div className="relative w-full max-w-md">{children}</div>
+    <div className="relative min-h-screen flex items-center justify-center p-4">
+      {/* Background layer */}
+      <SingularityBackground speed={0.5} mouseSensitivity={1} hue={220} saturation={0.8} brightness={0.5} />
+      
+      {/* Content layer */}
+      <div className="relative z-10 w-full max-w-md">{children}</div>
     </div>
   );
 }
