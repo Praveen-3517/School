@@ -62,6 +62,13 @@
 **Trade-offs**: None, this provides essential visual feedback (a top progress bar and a skeleton spinner) while data fetches.
 **Expected impact**: Users immediately see a loading state when clicking sidebar links instead of assuming the buttons are broken.
 
+### July 25, 2026
+**Decision**: Created a reusable `<ComingSoon />` component and applied it to all unfinished admin routes.
+**Reason**: The user was clicking placeholder sidebar links (e.g., `/admin/assignments/teachers`, `/admin/academic/classes`) and encountering scary standard Next.js 404 Not Found pages.
+**Alternatives considered**: Removing the links from the sidebar entirely until they are built.
+**Trade-offs**: Leaving the links in the sidebar with a Coming Soon page gives a better sense of the complete platform vision without confusing the user with 404s.
+**Expected impact**: All placeholder sidebar links now cleanly render a professional "Under Construction" UI.
+
 ---
 
 ## File History
