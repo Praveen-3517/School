@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { GraduationCap, CalendarCheck, BookOpen, AlertCircle, User as UserIcon } from "lucide-react";
+import { GraduationCap, CalendarCheck, BookOpen, AlertCircle, User as UserIcon, CalendarClock } from "lucide-react";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -53,6 +53,28 @@ export default async function StudentDashboard() {
     }
   });
 
+  const activeEnrollment = student?.enrollments[0];
+  
+  const upcomingExams = activeEnrollment ? await prisma.examination.findMany({
+    where: {
+      academicSessionId: activeEnrollment.academicSessionId,
+      isPublished: true,
+      // Only show exams that haven't ended yet, or if endDate is null, fallback to all published
+      OR: [
+        { endDate: { gte: new Date() } },
+        { endDate: null }
+      ]
+    },
+    include: {
+      examinationSubjects: {
+        include: { subject: true },
+        orderBy: { examDate: 'asc' }
+      }
+    },
+    orderBy: { startDate: 'asc' },
+    take: 3
+  }) : [];
+
   if (!student || !student.profile) {
     return (
       <div className="flex-1 p-8 pt-6">
@@ -71,7 +93,6 @@ export default async function StudentDashboard() {
     );
   }
 
-  const activeEnrollment = student.enrollments[0];
   const className = activeEnrollment?.section?.class?.name || "N/A";
   const sectionName = activeEnrollment?.section?.name || "";
   const sessionName = activeEnrollment?.academicSession?.name || "N/A";
@@ -217,6 +238,54 @@ export default async function StudentDashboard() {
                 <Button variant="link" className="px-0" asChild>
                   <Link href="/student/attendance">View Full Attendance &rarr;</Link>
                 </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Upcoming Exams Section */}
+      <div className="grid gap-4 md:grid-cols-1">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <CalendarClock className="h-5 w-5 text-muted-foreground" />
+              Upcoming Examinations
+            </CardTitle>
+            <CardDescription>
+              Your schedule for upcoming tests and exams.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {upcomingExams.length === 0 ? (
+              <p className="text-muted-foreground text-sm">No upcoming examinations scheduled at this time.</p>
+            ) : (
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {upcomingExams.map(exam => (
+                  <div key={exam.id} className="border rounded-xl p-4 shadow-sm bg-card">
+                    <div className="mb-4 border-b pb-3">
+                      <h4 className="font-semibold text-lg">{exam.name}</h4>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {exam.startDate ? new Date(exam.startDate).toLocaleDateString() : 'TBA'} 
+                        {exam.endDate ? ` - ${new Date(exam.endDate).toLocaleDateString()}` : ''}
+                      </p>
+                    </div>
+                    {exam.examinationSubjects.length === 0 ? (
+                      <p className="text-sm text-muted-foreground italic">Subjects timetable not yet published.</p>
+                    ) : (
+                      <div className="space-y-3">
+                        {exam.examinationSubjects.map(es => (
+                          <div key={es.id} className="flex items-center justify-between text-sm">
+                            <span className="font-medium">{es.subject.name}</span>
+                            <span className="text-muted-foreground text-xs bg-muted px-2 py-1 rounded-md">
+                              {es.examDate ? new Date(es.examDate).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }) : 'TBA'}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
             )}
           </CardContent>
