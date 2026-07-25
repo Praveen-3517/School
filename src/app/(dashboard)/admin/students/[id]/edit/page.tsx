@@ -37,6 +37,20 @@ export default async function EditStudentPage(props: EditStudentPageProps) {
     notFound();
   }
 
+  // Fetch sections with their classes for the dropdown
+  const sections = await prisma.section.findMany({
+    include: { class: true },
+    orderBy: [
+      { class: { level: 'asc' } },
+      { name: 'asc' }
+    ]
+  });
+
+  const formattedSections = sections.map(s => ({
+    id: s.id,
+    name: `${s.class.name} - ${s.name}`
+  }));
+
   const initialData = {
     firstName: student.profile.firstName,
     lastName: student.profile.lastName,
@@ -69,7 +83,7 @@ export default async function EditStudentPage(props: EditStudentPageProps) {
       </div>
       
       <div className="max-w-4xl">
-        <StudentForm initialData={initialData} />
+        <StudentForm initialData={initialData} sections={formattedSections} />
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import { StudentForm } from "@/components/students/student-form";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { prisma } from "@/lib/db/prisma";
 
 export const metadata: Metadata = {
   title: "Add New Student | EduManage",
@@ -12,6 +13,20 @@ export const metadata: Metadata = {
 
 export default async function NewStudentPage() {
   await requireAdmin();
+
+  // Fetch sections with their classes for the dropdown
+  const sections = await prisma.section.findMany({
+    include: { class: true },
+    orderBy: [
+      { class: { level: 'asc' } },
+      { name: 'asc' }
+    ]
+  });
+
+  const formattedSections = sections.map(s => ({
+    id: s.id,
+    name: `${s.class.name} - ${s.name}`
+  }));
 
   return (
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
@@ -26,7 +41,7 @@ export default async function NewStudentPage() {
       </div>
       
       <div className="max-w-4xl">
-        <StudentForm />
+        <StudentForm sections={formattedSections} />
       </div>
     </div>
   );

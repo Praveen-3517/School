@@ -28,7 +28,13 @@ import {
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 
-export function StudentForm({ initialData }: { initialData?: Partial<StudentFormValues> }) {
+export function StudentForm({ 
+  initialData,
+  sections
+}: { 
+  initialData?: Partial<StudentFormValues>;
+  sections: { id: string; name: string }[];
+}) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -299,10 +305,11 @@ export function StudentForm({ initialData }: { initialData?: Partial<StudentForm
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {/* In a real app, these would be fetched dynamically */}
-                      <SelectItem value="cl1s1">Class 1 - Section A</SelectItem>
-                      <SelectItem value="cl10s1">Class 10 - Section A</SelectItem>
-                      <SelectItem value="cl12s1">Class 12 - Science</SelectItem>
+                      {sections.map((section) => (
+                        <SelectItem key={section.id} value={section.id}>
+                          {section.name}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />
