@@ -9,8 +9,12 @@ export const teacherSchema = z.object({
   employeeId: z.string().min(3, "Employee ID is required"),
   department: z.string().min(2, "Department is required"),
   designation: z.string().min(2, "Designation is required"),
-  joinedAt: z.string().refine((val) => !isNaN(Date.parse(val)), {
-    message: "Invalid joining date",
+  joinedAt: z.string().refine((val) => {
+    const d = new Date(val);
+    const year = d.getFullYear();
+    return !isNaN(d.getTime()) && year >= 1900 && year <= new Date().getFullYear() + 1;
+  }, {
+    message: "Invalid joining date. Year must be valid.",
   }),
   isActive: z.boolean().default(true),
 });

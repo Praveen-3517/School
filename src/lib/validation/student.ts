@@ -5,8 +5,12 @@ export const studentSchema = z.object({
   lastName: z.string().min(1, "Last name is required").max(50),
   email: z.string().email("Invalid email address"),
   phone: z.string().min(10, "Phone number must be at least 10 digits").max(15).optional().or(z.literal("")),
-  dateOfBirth: z.string().refine((val) => !isNaN(Date.parse(val)), {
-    message: "Invalid date of birth",
+  dateOfBirth: z.string().refine((val) => {
+    const d = new Date(val);
+    const year = d.getFullYear();
+    return !isNaN(d.getTime()) && year >= 1900 && year <= new Date().getFullYear();
+  }, {
+    message: "Invalid date of birth. Year must be valid.",
   }),
   bloodGroup: z.string().optional().or(z.literal("")),
   address: z.string().min(5, "Address must be at least 5 characters").max(255),
@@ -20,8 +24,12 @@ export const studentSchema = z.object({
   // Academic Info
   admissionNumber: z.string().min(3, "Admission number is required"),
   enrollmentNumber: z.string().min(3, "Enrollment number is required"),
-  admissionDate: z.string().refine((val) => !isNaN(Date.parse(val)), {
-    message: "Invalid admission date",
+  admissionDate: z.string().refine((val) => {
+    const d = new Date(val);
+    const year = d.getFullYear();
+    return !isNaN(d.getTime()) && year >= 1900 && year <= new Date().getFullYear() + 1;
+  }, {
+    message: "Invalid admission date. Year must be valid.",
   }),
   sectionId: z.string().min(1, "Class/Section is required"),
   status: z.enum(["ACTIVE", "GRADUATED", "SUSPENDED", "WITHDRAWN"]).default("ACTIVE"),
