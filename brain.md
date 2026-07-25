@@ -55,6 +55,13 @@
 **Trade-offs**: None.
 **Expected impact**: Middleware correctly identifies user roles from JWT cookies and routes them to their dashboard after a successful login.
 
+### July 25, 2026
+**Decision**: Added `nextjs-toploader` and a dashboard-level `loading.tsx`.
+**Reason**: Next.js App Router client-side navigation (via `<Link>`) silently waits for Server Components to finish rendering before transitioning if no loading boundary is present. Because the Turso database sometimes takes 3-5 seconds to wake up from sleep on Vercel Edge, clicking sidebar links appeared to do absolutely nothing (UI freeze).
+**Alternatives considered**: Optimistic UI updates.
+**Trade-offs**: None, this provides essential visual feedback (a top progress bar and a skeleton spinner) while data fetches.
+**Expected impact**: Users immediately see a loading state when clicking sidebar links instead of assuming the buttons are broken.
+
 ---
 
 ## File History
