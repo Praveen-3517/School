@@ -69,6 +69,13 @@
 **Trade-offs**: Leaving the links in the sidebar with a Coming Soon page gives a better sense of the complete platform vision without confusing the user with 404s.
 **Expected impact**: All placeholder sidebar links now cleanly render a professional "Under Construction" UI.
 
+### July 25, 2026
+**Decision**: Refactored `StudentForm` to accept dynamic `sections` from the database instead of using hardcoded mock data.
+**Reason**: When attempting to create a new student, the user encountered a "Section not found" error because the dropdown was rendering hardcoded strings (e.g., `cl10s1`) that didn't match the actual generated UUIDs in the Turso database.
+**Alternatives considered**: None, this is required for production.
+**Trade-offs**: None.
+**Expected impact**: Administrators can successfully add and edit students by selecting real database-driven class sections.
+
 ---
 
 ## File History
