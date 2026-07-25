@@ -16,6 +16,7 @@ import { AdminRecentActivity } from "@/components/admin/admin-recent-activity";
 import { AdminAttendanceChart } from "@/components/admin/admin-attendance-chart";
 import { AdminPerformanceChart } from "@/components/admin/admin-performance-chart";
 import { formatDate, formatRelativeTime } from "@/lib/utils/utils";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -107,6 +108,7 @@ export default async function AdminDashboardPage() {
       icon: Users,
       color: "text-blue-600 dark:text-blue-400",
       bg: "bg-blue-50 dark:bg-blue-950/50",
+      href: "/admin/students",
     },
     {
       label: "Teachers",
@@ -115,6 +117,7 @@ export default async function AdminDashboardPage() {
       icon: UserCheck,
       color: "text-emerald-600 dark:text-emerald-400",
       bg: "bg-emerald-50 dark:bg-emerald-950/50",
+      href: "/admin/teachers",
     },
     {
       label: "Classes",
@@ -123,6 +126,7 @@ export default async function AdminDashboardPage() {
       icon: GanttChart,
       color: "text-violet-600 dark:text-violet-400",
       bg: "bg-violet-50 dark:bg-violet-950/50",
+      href: "/admin/academic/classes",
     },
     {
       label: "Subjects",
@@ -131,6 +135,7 @@ export default async function AdminDashboardPage() {
       icon: BookOpen,
       color: "text-orange-600 dark:text-orange-400",
       bg: "bg-orange-50 dark:bg-orange-950/50",
+      href: "/admin/academic/subjects",
     },
   ];
 
@@ -169,24 +174,31 @@ export default async function AdminDashboardPage() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         {stats.map((stat) => (
-          <Card key={stat.label} className="hover:shadow-md transition-shadow">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">
-                    {stat.label}
-                  </p>
-                  <p className="text-3xl font-bold mt-1">{stat.value}</p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {stat.subtitle}
-                  </p>
+          <Link 
+            key={stat.label} 
+            href={stat.href} 
+            className="block focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background rounded-xl outline-none"
+            aria-label={`View ${stat.label} management`}
+          >
+            <Card className="hover:shadow-md hover:border-primary/30 hover:-translate-y-0.5 transition-all duration-200 cursor-pointer h-full group">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
+                      {stat.label}
+                    </p>
+                    <p className="text-3xl font-bold mt-1 group-hover:text-primary transition-colors">{stat.value}</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {stat.subtitle}
+                    </p>
+                  </div>
+                  <div className={`rounded-xl p-3 ${stat.bg} group-hover:scale-110 group-hover:shadow-sm transition-all duration-300`}>
+                    <stat.icon className={`h-6 w-6 ${stat.color}`} />
+                  </div>
                 </div>
-                <div className={`rounded-xl p-3 ${stat.bg}`}>
-                  <stat.icon className={`h-6 w-6 ${stat.color}`} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </Link>
         ))}
       </div>
 
