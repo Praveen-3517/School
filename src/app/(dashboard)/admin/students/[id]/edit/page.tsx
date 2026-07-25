@@ -41,7 +41,7 @@ export default async function EditStudentPage(props: EditStudentPageProps) {
   const sections = await prisma.section.findMany({
     include: { class: true },
     orderBy: [
-      { class: { level: 'asc' } },
+      { class: { displayOrder: 'asc' } },
       { name: 'asc' }
     ]
   });

@@ -18,7 +18,7 @@ export default async function NewStudentPage() {
   const sections = await prisma.section.findMany({
     include: { class: true },
     orderBy: [
-      { class: { level: 'asc' } },
+      { class: { displayOrder: 'asc' } },
       { name: 'asc' }
     ]
   });
