@@ -18,6 +18,7 @@ import {
   CalendarDays,
   FileText,
   Award,
+  IndianRupee,
 } from "lucide-react";
 import { cn } from "@/lib/utils/utils";
 import { useState } from "react";
@@ -77,6 +78,16 @@ const NAV_ITEMS: NavItem[] = [
     icon: GanttChart,
     children: [
       { label: "Teacher Assignments", href: "/admin/assignments/teachers", icon: UserCheck },
+    ],
+  },
+  {
+    label: "Fees & Finance",
+    icon: IndianRupee,
+    children: [
+      { label: "Dashboard", href: "/admin/fees", icon: LayoutDashboard },
+      { label: "Fee Structures", href: "/admin/fees/structures", icon: ClipboardList },
+      { label: "Student Fees", href: "/admin/fees/students", icon: Users },
+      { label: "Reports", href: "/admin/fees/reports", icon: BarChart3 },
     ],
   },
   {

@@ -4,7 +4,7 @@
 // =============================================================================
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
 }
 
@@ -13,30 +13,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 // =============================================================================
 // ENUMS
 // =============================================================================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // =============================================================================
 // USER & AUTH MODELS
@@ -48,19 +27,25 @@ model User {
   email        String    @unique
   username     String?   @unique
   passwordHash String
-  role String
+  role         String
   isActive     Boolean   @default(true)
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   lastLoginAt  DateTime?
 
   // Relations
-  student              Student?
-  teacher              Teacher?
-  userPermissions      UserPermission[]
-  actorAuditLogs       AuditLog[]       @relation("AuditActor")
-  notifications        Notification[]
-  passwordResetTokens  PasswordResetToken[]
+  student             Student?
+  teacher             Teacher?
+  userPermissions     UserPermission[]
+  actorAuditLogs      AuditLog[]           @relation("AuditActor")
+  notifications       Notification[]
+  passwordResetTokens PasswordResetToken[]
+
+  // Fee relations
+  feeStructuresCreated FeeStructure[]
+  paymentsReceived     FeePayment[]
+  lateFeesWaived       LateFee[]
+  discountsApproved    FeeDiscount[]
 
   @@index([email])
   @@index([username])
@@ -70,12 +55,12 @@ model User {
 }
 
 model PasswordResetToken {
-  id        String   @id @default(cuid())
-  token     String   @unique
+  id        String    @id @default(cuid())
+  token     String    @unique
   userId    String
   expiresAt DateTime
   usedAt    DateTime?
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -89,10 +74,10 @@ model PasswordResetToken {
 // =============================================================================
 
 model RolePermission {
-  id         String     @id @default(cuid())
-  role String
+  id         String   @id @default(cuid())
+  role       String
   permission String
-  createdAt  DateTime   @default(now())
+  createdAt  DateTime @default(now())
 
   @@unique([role, permission])
   @@index([role])
@@ -100,12 +85,12 @@ model RolePermission {
 }
 
 model UserPermission {
-  id         String     @id @default(cuid())
+  id         String   @id @default(cuid())
   userId     String
   permission String
-  granted    Boolean    @default(true) // false = explicitly revoked
-  createdAt  DateTime   @default(now())
-  grantedBy  String?    // Admin user ID who granted this
+  granted    Boolean  @default(true) // false = explicitly revoked
+  createdAt  DateTime @default(now())
+  grantedBy  String? // Admin user ID who granted this
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -119,24 +104,30 @@ model UserPermission {
 // =============================================================================
 
 model Student {
-  id               String        @id @default(cuid())
-  userId           String        @unique
-  enrollmentNumber String        @unique
-  admissionNumber  String        @unique
+  id               String   @id @default(cuid())
+  userId           String   @unique
+  enrollmentNumber String   @unique
+  admissionNumber  String   @unique
   admissionDate    DateTime
-  status String @default("ACTIVE")
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
+  status           String   @default("ACTIVE")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   // Relations
-  user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  profile       StudentProfile?
-  guardian      GuardianInfo?
-  enrollments   StudentEnrollment[]
-  marks         Mark[]
-  attendance    Attendance[]
-  documents     Document[]
-  remarks       TeacherRemark[]
+  user        User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  profile     StudentProfile?
+  guardian    GuardianInfo?
+  enrollments StudentEnrollment[]
+  marks       Mark[]
+  attendance  Attendance[]
+  documents   Document[]
+  remarks     TeacherRemark[]
+
+  // Fee relations
+  studentFees  StudentFee[]
+  feePayments  FeePayment[]
+  lateFees     LateFee[]
+  feeDiscounts FeeDiscount[]
 
   @@index([enrollmentNumber])
   @@index([admissionNumber])
@@ -145,24 +136,24 @@ model Student {
 }
 
 model StudentProfile {
-  id          String     @id @default(cuid())
-  studentId   String     @unique
-  firstName   String
-  lastName    String
-  middleName  String?
-  dateOfBirth DateTime
-  gender String
-  bloodGroup String @default("UNKNOWN")
-  phone       String?
-  altPhone    String?
-  photoUrl    String?
+  id            String   @id @default(cuid())
+  studentId     String   @unique
+  firstName     String
+  lastName      String
+  middleName    String?
+  dateOfBirth   DateTime
+  gender        String
+  bloodGroup    String   @default("UNKNOWN")
+  phone         String?
+  altPhone      String?
+  photoUrl      String?
   photoPublicId String? // Cloudinary public ID for deletion
-  address     String?
-  city        String?
-  state       String?
-  postalCode  String?
-  country     String     @default("India")
-  updatedAt   DateTime   @updatedAt
+  address       String?
+  city          String?
+  state         String?
+  postalCode    String?
+  country       String   @default("India")
+  updatedAt     DateTime @updatedAt
 
   student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
@@ -171,22 +162,22 @@ model StudentProfile {
 }
 
 model GuardianInfo {
-  id             String   @id @default(cuid())
-  studentId      String   @unique
-  fatherName     String?
-  fatherPhone    String?
-  fatherEmail    String?
+  id               String   @id @default(cuid())
+  studentId        String   @unique
+  fatherName       String?
+  fatherPhone      String?
+  fatherEmail      String?
   fatherOccupation String?
-  motherName     String?
-  motherPhone    String?
-  motherEmail    String?
+  motherName       String?
+  motherPhone      String?
+  motherEmail      String?
   motherOccupation String?
-  guardianName   String?
-  guardianPhone  String?
-  guardianEmail  String?
-  guardianAddress String?
-  relationship   String?  // e.g., "Uncle", "Grandparent"
-  updatedAt      DateTime @updatedAt
+  guardianName     String?
+  guardianPhone    String?
+  guardianEmail    String?
+  guardianAddress  String?
+  relationship     String? // e.g., "Uncle", "Grandparent"
+  updatedAt        DateTime @updatedAt
 
   student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
@@ -198,19 +189,19 @@ model GuardianInfo {
 // =============================================================================
 
 model Teacher {
-  id              String   @id @default(cuid())
-  userId          String   @unique
-  employeeId      String   @unique
-  qualification   String?
-  specialization  String?
-  phone           String?
-  joiningDate     DateTime?
-  isClassTeacher  Boolean  @default(false)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id             String    @id @default(cuid())
+  userId         String    @unique
+  employeeId     String    @unique
+  qualification  String?
+  specialization String?
+  phone          String?
+  joiningDate    DateTime?
+  isClassTeacher Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
   // Relations
-  user        User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User                @relation(fields: [userId], references: [id], onDelete: Cascade)
   assignments TeacherAssignment[]
   marks       Mark[]
   attendance  Attendance[]
@@ -225,41 +216,48 @@ model Teacher {
 // =============================================================================
 
 model AcademicSession {
-  id          String   @id @default(cuid())
-  name        String   @unique // e.g. "2025-2026"
-  startDate   DateTime
-  endDate     DateTime
-  isCurrent   Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  name      String   @unique // e.g. "2025-2026"
+  startDate DateTime
+  endDate   DateTime
+  isCurrent Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Relations
-  enrollments       StudentEnrollment[]
+  enrollments        StudentEnrollment[]
   teacherAssignments TeacherAssignment[]
-  examinations      Examination[]
-  attendance        Attendance[]
+  examinations       Examination[]
+  attendance         Attendance[]
+
+  // Fee relations
+  feeStructures FeeStructure[]
+  studentFees   StudentFee[]
 
   @@index([isCurrent])
   @@map("academic_sessions")
 }
 
 model Class {
-  id          String   @id @default(cuid())
-  name        String   @unique // e.g. "Class 9"
-  displayOrder Int     @default(0)
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id           String   @id @default(cuid())
+  name         String   @unique // e.g. "Class 9"
+  displayOrder Int      @default(0)
+  description  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   // Relations
-  sections  Section[]
+  sections Section[]
+
+  // Fee relations
+  feeStructures FeeStructure[]
 
   @@map("classes")
 }
 
 model Section {
   id          String   @id @default(cuid())
-  name        String   // e.g. "A", "B"
+  name        String // e.g. "A", "B"
   classId     String
   capacity    Int?     @default(40)
   description String?
@@ -271,6 +269,9 @@ model Section {
   enrollments        StudentEnrollment[]
   teacherAssignments TeacherAssignment[]
   attendance         Attendance[]
+
+  // Fee relations
+  feeStructures FeeStructure[]
 
   @@unique([classId, name])
   @@index([classId])
@@ -350,18 +351,18 @@ model TeacherAssignment {
 // =============================================================================
 
 model Examination {
-  id                String   @id @default(cuid())
-  name              String   // e.g. "Unit Test 1", "Mid Term", "Final"
+  id                String    @id @default(cuid())
+  name              String // e.g. "Unit Test 1", "Mid Term", "Final"
   academicSessionId String
   startDate         DateTime?
   endDate           DateTime?
-  isPublished       Boolean  @default(false)
+  isPublished       Boolean   @default(false)
   description       String?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
   // Relations
-  academicSession     AcademicSession     @relation(fields: [academicSessionId], references: [id], onDelete: Restrict)
+  academicSession     AcademicSession      @relation(fields: [academicSessionId], references: [id], onDelete: Restrict)
   examinationSubjects ExaminationSubject[]
   marks               Mark[]
 
@@ -370,7 +371,7 @@ model Examination {
 }
 
 model ExaminationSubject {
-  id            String @id @default(cuid())
+  id            String    @id @default(cuid())
   examinationId String
   subjectId     String
   maxMarks      Float
@@ -386,19 +387,19 @@ model ExaminationSubject {
 }
 
 model Mark {
-  id             String   @id @default(cuid())
-  studentId      String
-  examinationId  String
-  subjectId      String
-  teacherId      String?  // Teacher who entered/updated the marks
-  obtainedMarks  Float?
-  maxMarks       Float
-  grade String    @default("NOT_GRADED")
-  percentage     Float?
-  remarks        String?
-  isAbsent       Boolean  @default(false)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id            String   @id @default(cuid())
+  studentId     String
+  examinationId String
+  subjectId     String
+  teacherId     String? // Teacher who entered/updated the marks
+  obtainedMarks Float?
+  maxMarks      Float
+  grade         String   @default("NOT_GRADED")
+  percentage    Float?
+  remarks       String?
+  isAbsent      Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   // Relations
   student     Student     @relation(fields: [studentId], references: [id], onDelete: Restrict)
@@ -418,17 +419,17 @@ model Mark {
 // =============================================================================
 
 model Attendance {
-  id                String           @id @default(cuid())
+  id                String   @id @default(cuid())
   studentId         String
   sectionId         String?
   subjectId         String?
   academicSessionId String
   teacherId         String?
-  date              DateTime         
-  status String
+  date              DateTime
+  status            String
   remarks           String?
-  createdAt         DateTime         @default(now())
-  updatedAt         DateTime         @updatedAt
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
   // Relations
   student         Student         @relation(fields: [studentId], references: [id], onDelete: Restrict)
@@ -473,18 +474,18 @@ model TeacherRemark {
 // =============================================================================
 
 model Document {
-  id                  String       @id @default(cuid())
-  studentId           String
-  name                String
-  type String
-  fileUrl             String
-  publicId            String       // Cloudinary/storage public ID
-  mimeType            String
-  sizeBytes           Int
-  isVisibleToStudent  Boolean      @default(false)
-  uploadedById        String?      // User ID of uploader
-  createdAt           DateTime     @default(now())
-  updatedAt           DateTime     @updatedAt
+  id                 String   @id @default(cuid())
+  studentId          String
+  name               String
+  type               String
+  fileUrl            String
+  publicId           String // Cloudinary/storage public ID
+  mimeType           String
+  sizeBytes          Int
+  isVisibleToStudent Boolean  @default(false)
+  uploadedById       String? // User ID of uploader
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   // Relations
   student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
@@ -498,17 +499,17 @@ model Document {
 // =============================================================================
 
 model AuditLog {
-  id           String      @id @default(cuid())
+  id           String   @id @default(cuid())
   actorUserId  String?
-  action String
-  entityType   String      // e.g. "Student", "Mark", "Attendance"
+  action       String
+  entityType   String // e.g. "Student", "Mark", "Attendance"
   entityId     String?
   previousData String?
-  newData String?
+  newData      String?
   ipAddress    String?
   userAgent    String?
-  metadata String?
-  createdAt    DateTime    @default(now())
+  metadata     String?
+  createdAt    DateTime @default(now())
 
   // Relations
   actor User? @relation("AuditActor", fields: [actorUserId], references: [id], onDelete: SetNull)
@@ -526,14 +527,14 @@ model AuditLog {
 // =============================================================================
 
 model Notification {
-  id        String           @id @default(cuid())
+  id        String   @id @default(cuid())
   userId    String
-  type String
+  type      String
   title     String
   message   String
-  isRead    Boolean          @default(false)
-  metadata String?
-  createdAt DateTime         @default(now())
+  isRead    Boolean  @default(false)
+  metadata  String?
+  createdAt DateTime @default(now())
 
   // Relations
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -557,4 +558,148 @@ model SystemSetting {
 
   @@index([key])
   @@map("system_settings")
+}
+
+// =============================================================================
+// FEE & FINANCE MODELS
+// =============================================================================
+
+model FeeCategory {
+  id          String   @id @default(cuid())
+  name        String   @unique // e.g. "Tuition Fee", "Library Fee"
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  feeStructures FeeStructure[]
+
+  @@map("fee_categories")
+}
+
+model FeeStructure {
+  id                String    @id @default(cuid())
+  name              String
+  description       String?
+  academicSessionId String
+  classId           String?
+  sectionId         String?
+  feeCategoryId     String
+  amount            Float
+  frequency         String    @default("ONE_TIME") // ONE_TIME, MONTHLY, YEARLY
+  dueDate           DateTime?
+  isMandatory       Boolean   @default(true)
+  isActive          Boolean   @default(true)
+  createdById       String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  // Relations
+  academicSession AcademicSession @relation(fields: [academicSessionId], references: [id], onDelete: Restrict)
+  class           Class?          @relation(fields: [classId], references: [id], onDelete: SetNull)
+  section         Section?        @relation(fields: [sectionId], references: [id], onDelete: SetNull)
+  feeCategory     FeeCategory     @relation(fields: [feeCategoryId], references: [id], onDelete: Restrict)
+  creator         User?           @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  studentFees     StudentFee[]
+
+  @@index([academicSessionId])
+  @@index([classId])
+  @@index([feeCategoryId])
+  @@map("fee_structures")
+}
+
+model StudentFee {
+  id                String    @id @default(cuid())
+  studentId         String
+  feeStructureId    String
+  academicSessionId String
+  originalAmount    Float
+  discountAmount    Float     @default(0)
+  dueDate           DateTime?
+  status            String    @default("UNPAID") // UNPAID, PARTIAL, PAID, OVERDUE, CANCELLED
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  // Relations
+  student         Student         @relation(fields: [studentId], references: [id], onDelete: Restrict)
+  feeStructure    FeeStructure    @relation(fields: [feeStructureId], references: [id], onDelete: Restrict)
+  academicSession AcademicSession @relation(fields: [academicSessionId], references: [id], onDelete: Restrict)
+  payments        FeePayment[]
+  lateFees        LateFee[]
+  discounts       FeeDiscount[]
+
+  @@index([studentId])
+  @@index([feeStructureId])
+  @@index([academicSessionId])
+  @@index([status])
+  @@map("student_fees")
+}
+
+model FeePayment {
+  id                   String   @id @default(cuid())
+  studentFeeId         String
+  studentId            String
+  amount               Float
+  paymentDate          DateTime @default(now())
+  paymentMethod        String // CASH, BANK_TRANSFER, ONLINE, UPI, CHEQUE, OTHER
+  transactionReference String?
+  receiptNumber        String   @unique
+  notes                String?
+  status               String   @default("SUCCESS") // SUCCESS, PENDING, FAILED, REFUNDED
+  receivedById         String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  // Relations
+  studentFee StudentFee @relation(fields: [studentFeeId], references: [id], onDelete: Restrict)
+  student    Student    @relation(fields: [studentId], references: [id], onDelete: Restrict)
+  receivedBy User?      @relation(fields: [receivedById], references: [id], onDelete: SetNull)
+
+  @@index([studentFeeId])
+  @@index([studentId])
+  @@index([receiptNumber])
+  @@map("fee_payments")
+}
+
+model LateFee {
+  id           String    @id @default(cuid())
+  studentFeeId String
+  studentId    String
+  type         String // FIXED, PERCENTAGE
+  amount       Float?
+  percentage   Float?
+  reason       String?
+  appliedDate  DateTime  @default(now())
+  status       String    @default("ACTIVE") // ACTIVE, WAIVED
+  waivedById   String?
+  waivedAt     DateTime?
+  waiverReason String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  // Relations
+  studentFee StudentFee @relation(fields: [studentFeeId], references: [id], onDelete: Restrict)
+  student    Student    @relation(fields: [studentId], references: [id], onDelete: Restrict)
+  waivedBy   User?      @relation(fields: [waivedById], references: [id], onDelete: SetNull)
+
+  @@index([studentFeeId])
+  @@map("late_fees")
+}
+
+model FeeDiscount {
+  id           String   @id @default(cuid())
+  studentFeeId String
+  studentId    String
+  amount       Float
+  reason       String
+  approvedById String?
+  createdAt    DateTime @default(now())
+
+  // Relations
+  studentFee StudentFee @relation(fields: [studentFeeId], references: [id], onDelete: Restrict)
+  student    Student    @relation(fields: [studentId], references: [id], onDelete: Restrict)
+  approvedBy User?      @relation(fields: [approvedById], references: [id], onDelete: SetNull)
+
+  @@index([studentFeeId])
+  @@map("fee_discounts")
 }
