@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "@/components/providers";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
+import NextTopLoader from 'nextjs-toploader';
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -40,6 +41,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={cn("font-sans", geist.variable)}>
       <body className="min-h-screen bg-background font-sans antialiased">
+        <NextTopLoader color="#4f46e5" showSpinner={false} />
         <Providers>
           {children}
           <Toaster richColors position="top-right" />
