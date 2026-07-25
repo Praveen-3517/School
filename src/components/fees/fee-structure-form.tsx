@@ -113,7 +113,7 @@ export function FeeStructureForm({ categories, sessions, classes }: FeeStructure
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Fee Category</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select a category" />
@@ -136,7 +136,7 @@ export function FeeStructureForm({ categories, sessions, classes }: FeeStructure
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Academic Session</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select session" />
@@ -159,7 +159,7 @@ export function FeeStructureForm({ categories, sessions, classes }: FeeStructure
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Target Class (Optional)</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Global (All Classes)" />
@@ -198,7 +198,7 @@ export function FeeStructureForm({ categories, sessions, classes }: FeeStructure
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Frequency</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select frequency" />
