@@ -2,6 +2,14 @@
 
 ## Chronological History
 
+### July 27, 2026 (UI Update)
+**Files changed**:
+- `src/app/layout.tsx`, `src/app/(auth)/layout.tsx`
+- `src/components/ui/neural-bg.tsx`, `src/components/ui/neural-bg-wrapper.tsx`
+**Reason**: User requested to replace the login page background UI with a new WebGL-based Neural Background (NeuralBg).
+**Summary**: Ported a Vue/OGL NeuralBg component to React. Implemented dynamic importing (`next/dynamic` with `ssr: false`) to avoid server-side rendering crashes caused by the `ogl` library. Isolated the background specifically to the authentication layout so it doesn't appear on the dashboard. Maintained a dark background (`bg-black`) to ensure the glowing neural shapes render correctly.
+**Impact**: The login page now features a mesmerising, interactive WebGL neural network background, enhancing the premium feel of the portal.
+
 ### July 27, 2026
 **Files changed**:
 - `src/app/(dashboard)/admin/marks/page.tsx`
@@ -163,13 +171,14 @@ The system now includes robust auditing capabilities for administrators (capturi
 The Next.js production build (`pnpm build`) succeeds cleanly with no TypeScript or Lint errors.
 We successfully resolved a series of extremely frustrating Vercel deployment bugs related to Prisma Edge compatibility, Native Node Module compilation errors (`argon2`), and Next.js Middleware infinite redirect loops affecting NextAuth JSON responses.
 The application is currently deployed on Vercel and we are debugging the final post-login redirect flow.
-We have also ported and implemented a stunning `Vortex` interactive Canvas background using `simplex-noise` for the public landing page and login screens.
+We have also ported and implemented a stunning `NeuralBg` interactive WebGL background using the `ogl` library for the login screens, isolated away from the dashboard.
 
 **Recent Additions (July 27)**:
 - Fixed an alphabetical class sorting bug.
 - Added explicit Logout buttons to sidebars.
 - Made all student/teacher data entry fields optional by auto-generating dummy fallbacks to satisfy the database.
 - Added an optional `aadharNumber` field via a manual Turso SQL migration.
+- Replaced Aceternity/Inspira-UI cursor/vortex backgrounds with a highly optimized WebGL `NeuralBg` component on the authentication layout.
 
 ---
 
