@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { signOut } from "next-auth/react";
 import {
   GraduationCap,
   LayoutDashboard,
@@ -19,6 +20,7 @@ import {
   FileText,
   Award,
   IndianRupee,
+  LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils/utils";
 import { useState } from "react";
@@ -232,9 +234,9 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
 
       {/* User info at bottom */}
       {!isCollapsed && (
-        <div className="border-t border-sidebar-border p-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-sidebar-accent text-xs font-semibold text-sidebar-accent-foreground">
+        <div className="border-t border-sidebar-border p-4 flex items-center justify-between">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-sidebar-accent text-xs font-semibold text-sidebar-accent-foreground shrink-0">
               {user.name.charAt(0).toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
@@ -246,6 +248,13 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
               </p>
             </div>
           </div>
+          <button
+            onClick={() => signOut({ callbackUrl: "/login" })}
+            className="p-2 text-sidebar-foreground/50 hover:text-destructive transition-colors shrink-0"
+            title="Log out"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
         </div>
       )}
     </aside>

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { signOut } from "next-auth/react";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
@@ -9,6 +10,7 @@ import {
   CalendarCheck,
   BookOpen,
   ClipboardList,
+  LogOut,
 } from "lucide-react";
 import type { Role } from "@/types/enums";
 
@@ -89,16 +91,25 @@ export function TeacherSidebar({ user }: TeacherSidebarProps) {
         </nav>
       </div>
       <div className="mt-auto border-t p-4">
-        <div className="flex items-center gap-3 rounded-lg bg-muted p-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary">
-            {user.name.charAt(0).toUpperCase()}
+        <div className="flex items-center justify-between rounded-lg bg-muted p-3">
+          <div className="flex items-center gap-3 overflow-hidden">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+              {user.name.charAt(0).toUpperCase()}
+            </div>
+            <div className="flex flex-col overflow-hidden">
+              <span className="truncate text-sm font-medium">{user.name}</span>
+              <span className="truncate text-xs text-muted-foreground">
+                {user.role}
+              </span>
+            </div>
           </div>
-          <div className="flex flex-col overflow-hidden">
-            <span className="truncate text-sm font-medium">{user.name}</span>
-            <span className="truncate text-xs text-muted-foreground">
-              {user.role}
-            </span>
-          </div>
+          <button
+            onClick={() => signOut({ callbackUrl: "/login" })}
+            className="p-2 text-muted-foreground hover:text-destructive transition-colors shrink-0"
+            title="Log out"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
         </div>
       </div>
     </aside>
