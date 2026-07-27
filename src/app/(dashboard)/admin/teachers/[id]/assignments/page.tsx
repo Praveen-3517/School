@@ -56,7 +56,7 @@ export default async function TeacherAssignmentsPage(props: TeacherAssignmentsPa
       class: { select: { id: true, name: true } }
     },
     orderBy: [
-      { class: { name: 'asc' } },
+      { class: { displayOrder: 'asc' } },
       { name: 'asc' }
     ]
   });

@@ -28,7 +28,7 @@ export default async function AdminAttendancePage(props: AdminAttendancePageProp
 
   const sections = await prisma.section.findMany({
     include: { class: true },
-    orderBy: [{ class: { name: 'asc' } }, { name: 'asc' }]
+    orderBy: [{ class: { displayOrder: 'asc' } }, { name: 'asc' }]
   });
 
   const subjects = await prisma.subject.findMany({
