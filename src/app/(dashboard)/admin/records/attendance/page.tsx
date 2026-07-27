@@ -135,7 +135,7 @@ export default async function AdminAttendancePage(props: AdminAttendancePageProp
                 href={`?date=${selectedDateStr}&sectionId=${section.id}${selectedSubjectId ? `&subjectId=${selectedSubjectId}` : ''}`}
                 className={`block p-2 rounded-md border text-sm transition-colors hover:bg-accent ${selectedSectionId === section.id ? 'border-primary bg-primary/5' : ''}`}
               >
-                Class {section.class.name}
+                {section.class.name}
               </Link>
             ))}
           </CardContent>
@@ -177,7 +177,7 @@ export default async function AdminAttendancePage(props: AdminAttendancePageProp
           <CardHeader>
             <CardTitle>Attendance Roster (Admin)</CardTitle>
             <CardDescription>
-              {format(selectedDate, "EEEE, MMMM do, yyyy")} | Class {selectedSection.class.name} {selectedSubject ? `| ${selectedSubject.name}` : ''}
+              {format(selectedDate, "EEEE, MMMM do, yyyy")} | {selectedSection.class.name} {selectedSubject ? `| ${selectedSubject.name}` : ''}
             </CardDescription>
           </CardHeader>
           <CardContent>

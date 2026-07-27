@@ -161,7 +161,7 @@ export default async function TeacherAttendancePage(props: TeacherAttendancePage
                   className={`flex justify-between items-center p-3 rounded-md border transition-colors hover:bg-accent ${selectedAssignmentId === assignment.id ? 'border-primary bg-primary/5' : ''}`}
                 >
                   <div>
-                    <div className="font-medium">Class {assignment.section?.class.name} - {assignment.section?.name}</div>
+                    <div className="font-medium">{assignment.section?.class.name}</div>
                     <div className="text-xs text-muted-foreground">
                       {assignment.subject?.name || "General"}
                     </div>
@@ -185,7 +185,7 @@ export default async function TeacherAttendancePage(props: TeacherAttendancePage
           <CardHeader>
             <CardTitle>Attendance Roster</CardTitle>
             <CardDescription>
-              {format(selectedDate, "EEEE, MMMM do, yyyy")} | Class {selectedAssignment.section?.class.name} - {selectedAssignment.section?.name} {selectedAssignment.subject ? `| ${selectedAssignment.subject.name}` : ''}
+              {format(selectedDate, "EEEE, MMMM do, yyyy")} | {selectedAssignment.section?.class.name} {selectedAssignment.subject ? `| ${selectedAssignment.subject.name}` : ''}
             </CardDescription>
           </CardHeader>
           <CardContent>

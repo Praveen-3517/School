@@ -149,7 +149,7 @@ export default async function TeacherMarksPage(props: TeacherMarksPageProps) {
                   <div>
                     <div className="font-medium">{assignment.subject?.name}</div>
                     <div className="text-xs text-muted-foreground">
-                      Class {assignment.section?.class.name} - {assignment.section?.name}
+                      {assignment.section?.class.name}
                     </div>
                   </div>
                   <Badge variant="outline">{assignment.academicSession.name}</Badge>
@@ -165,7 +165,7 @@ export default async function TeacherMarksPage(props: TeacherMarksPageProps) {
           <CardHeader>
             <CardTitle>Mark Entry Sheet</CardTitle>
             <CardDescription>
-              {selectedExam.name} | {selectedAssignment.subject?.name} | Class {selectedAssignment.section?.class.name} - {selectedAssignment.section?.name}
+              {selectedExam.name} | {selectedAssignment.subject?.name} | {selectedAssignment.section?.class.name}
             </CardDescription>
           </CardHeader>
           <CardContent>

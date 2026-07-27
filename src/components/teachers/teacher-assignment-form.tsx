@@ -128,7 +128,7 @@ export function TeacherAssignmentForm({ teacherId, subjects, sections, currentAs
               </SelectTrigger>
               <SelectContent>
                 {sections.map(s => (
-                  <SelectItem key={s.id} value={s.id}>Class {s.class.name} - Section {s.name}</SelectItem>
+                  <SelectItem key={s.id} value={s.id}>{s.class.name}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -164,7 +164,7 @@ export function TeacherAssignmentForm({ teacherId, subjects, sections, currentAs
                         {assignment.subject.name} <span className="text-muted-foreground text-xs ml-1">({assignment.subject.code})</span>
                       </TableCell>
                       <TableCell>
-                        Class {assignment.section.class.name}
+                        {assignment.section.class.name}
                       </TableCell>
                       <TableCell>
                         <Badge variant="outline">{assignment.academicSession}</Badge>

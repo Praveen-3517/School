@@ -121,7 +121,7 @@ export default async function StudentDashboard() {
           <CardContent>
             <div className="text-2xl font-bold">{student.enrollmentNumber}</div>
             <p className="text-xs text-muted-foreground mt-1">
-              Class {className} {sectionName ? `- ${sectionName}` : ""}
+              {className}
             </p>
           </CardContent>
         </Card>

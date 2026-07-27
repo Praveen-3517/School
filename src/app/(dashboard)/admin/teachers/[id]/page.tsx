@@ -130,7 +130,7 @@ export default async function TeacherProfilePage(props: TeacherProfilePageProps)
                         <div>
                           <p className="font-medium">{assignment.subject?.name || "Unknown Subject"}</p>
                           <p className="text-sm text-muted-foreground">
-                            Class {assignment.section?.class?.name || "Unknown"} - {assignment.section?.name || "Unknown"}
+                            {assignment.section?.class?.name || "Unknown"}
                           </p>
                         </div>
                       </div>
