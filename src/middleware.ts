@@ -38,11 +38,17 @@ export default auth((req: NextRequest & { auth: { user?: { role?: Role } } | nul
   }
 
   // Allow public routes
-  if (PUBLIC_ROUTES.some((route) => pathname.startsWith(route))) {
+  const isPublicRoute = PUBLIC_ROUTES.includes(pathname) || 
+    PUBLIC_ROUTES.filter(r => r !== "/").some(r => pathname.startsWith(`${r}/`));
+
+  if (isPublicRoute) {
     // If already logged in, redirect to dashboard
     if (session?.user?.role) {
       const dashboard = ROLE_DASHBOARD[session.user.role];
-      return NextResponse.redirect(new URL(dashboard, req.url));
+      // Prevent infinite redirect if already on the dashboard (though technically dashboards aren't in PUBLIC_ROUTES)
+      if (pathname !== dashboard) {
+        return NextResponse.redirect(new URL(dashboard, req.url));
+      }
     }
     return NextResponse.next();
   }
