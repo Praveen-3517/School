@@ -7,7 +7,6 @@ import { logAuditEvent } from "@/lib/audit";
 import { revalidatePath } from "next/cache";
 import { hashPassword } from "@/lib/auth/password";
 import type { Role } from "@/types/enums";
-import { v4 as uuidv4 } from "uuid";
 
 export async function createStudent(data: StudentFormValues) {
   try {
