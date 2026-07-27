@@ -146,6 +146,7 @@ model StudentProfile {
   bloodGroup    String   @default("UNKNOWN")
   phone         String?
   altPhone      String?
+  aadharNumber  String?
   photoUrl      String?
   photoPublicId String? // Cloudinary public ID for deletion
   address       String?

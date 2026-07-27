@@ -22,6 +22,7 @@ export async function createStudent(data: StudentFormValues) {
     const lastName = parsed.data.lastName || "Student";
     const email = parsed.data.email || `student_${Date.now()}@school.local`;
     const phone = parsed.data.phone || null;
+    const aadharNumber = parsed.data.aadharNumber || null;
     const dateOfBirth = parsed.data.dateOfBirth ? new Date(parsed.data.dateOfBirth) : new Date("2010-01-01");
     const bloodGroup = parsed.data.bloodGroup || "UNKNOWN";
     const address = parsed.data.address || "Address not provided";
@@ -80,6 +81,7 @@ export async function createStudent(data: StudentFormValues) {
           gender: "PREFER_NOT_TO_SAY",
           bloodGroup,
           phone,
+          aadharNumber,
           address,
         },
       });

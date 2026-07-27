@@ -47,6 +47,7 @@ export function StudentForm({
       phone: "",
       dateOfBirth: "",
       bloodGroup: "",
+      aadharNumber: "",
       address: "",
       guardianName: "",
       guardianRelation: "",
@@ -163,6 +164,19 @@ export function StudentForm({
                   <FormLabel>Blood Group</FormLabel>
                   <FormControl>
                     <Input placeholder="O+" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="aadharNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Aadhar Number</FormLabel>
+                  <FormControl>
+                    <Input placeholder="XXXX XXXX XXXX" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

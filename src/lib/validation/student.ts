@@ -7,6 +7,7 @@ export const studentSchema = z.object({
   phone: z.string().optional().or(z.literal("")),
   dateOfBirth: z.string().optional().or(z.literal("")),
   bloodGroup: z.string().optional().or(z.literal("")),
+  aadharNumber: z.string().optional().or(z.literal("")),
   address: z.string().optional().or(z.literal("")),
   
   // Guardian Info
