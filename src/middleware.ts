@@ -12,7 +12,7 @@ import type { Role } from "@/types/enums";
 const { auth } = NextAuth(authConfig);
 
 // Routes accessible without authentication
-const PUBLIC_ROUTES = ["/login", "/forgot-password", "/reset-password", "/unauthorized"];
+const PUBLIC_ROUTES = ["/", "/login", "/forgot-password", "/reset-password", "/unauthorized"];
 
 // Role → dashboard mapping
 const ROLE_DASHBOARD: Record<Role, string> = {
@@ -47,15 +47,11 @@ export default auth((req: NextRequest & { auth: { user?: { role?: Role } } | nul
     return NextResponse.next();
   }
 
-  // Root redirect
-  if (pathname === "/") {
-    if (session?.user?.role) {
-      return NextResponse.redirect(
-        new URL(ROLE_DASHBOARD[session.user.role], req.url)
-      );
-    }
-    return NextResponse.redirect(new URL("/login", req.url));
-  }
+  // Root redirect was removed so landing page can be viewed.
+  // If you wanted to redirect logged-in users from root to their dashboard, you can do:
+  // if (pathname === "/" && session?.user?.role) {
+  //   return NextResponse.redirect(new URL(ROLE_DASHBOARD[session.user.role], req.url));
+  // }
 
   // Not authenticated — redirect to login
   if (!session?.user?.role) {

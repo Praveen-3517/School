@@ -25,7 +25,7 @@ export default async function NewStudentPage() {
 
   const formattedSections = sections.map(s => ({
     id: s.id,
-    name: `${s.class.name} - ${s.name}`
+    name: `${s.class.name}`
   }));
 
   return (

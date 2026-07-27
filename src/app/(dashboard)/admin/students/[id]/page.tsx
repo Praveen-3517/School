@@ -90,7 +90,7 @@ export default async function StudentProfilePage(props: StudentProfilePageProps)
               <div className="text-sm">
                 <p className="font-medium">Current Class</p>
                 <p className="text-muted-foreground">
-                  {enrollment ? `${enrollment.section.class.name} - ${enrollment.section.name}` : "Not Enrolled"}
+                  {enrollment ? `${enrollment.section.class.name}` : "Not Enrolled"}
                 </p>
               </div>
             </div>

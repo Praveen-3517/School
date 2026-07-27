@@ -297,7 +297,7 @@ export function StudentForm({
               name="sectionId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Class & Section *</FormLabel>
+                  <FormLabel>Class *</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>

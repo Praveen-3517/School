@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SingularityBackground } from "@/components/ui/singularity-background";
+import { Vortex } from "@/components/ui/vortex";
 
 export const metadata: Metadata = {
   title: "Sign In",
@@ -12,9 +12,17 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative min-h-screen flex items-center justify-center p-4">
+    <div className="relative min-h-screen flex items-center justify-center p-4 bg-black">
       {/* Background layer */}
-      <SingularityBackground speed={0.5} mouseSensitivity={1} hue={220} saturation={0.8} brightness={0.5} />
+      <Vortex
+        particleCount={500}
+        baseHue={220}
+        baseSpeed={0}
+        rangeSpeed={1.5}
+        backgroundColor="#000000"
+        className="absolute inset-0 z-0"
+        containerClassName="absolute inset-0 z-0"
+      />
       
       {/* Content layer */}
       <div className="relative z-10 w-full max-w-md">{children}</div>

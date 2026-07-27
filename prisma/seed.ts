@@ -100,25 +100,26 @@ async function main() {
   // Classes & Sections
   // ============================
   const classes = await Promise.all([
+    prisma.class.create({ data: { name: "LKG", displayOrder: -1 } }),
+    prisma.class.create({ data: { name: "UKG", displayOrder: 0 } }),
+    prisma.class.create({ data: { name: "Class 1", displayOrder: 1 } }),
+    prisma.class.create({ data: { name: "Class 2", displayOrder: 2 } }),
+    prisma.class.create({ data: { name: "Class 3", displayOrder: 3 } }),
+    prisma.class.create({ data: { name: "Class 4", displayOrder: 4 } }),
+    prisma.class.create({ data: { name: "Class 5", displayOrder: 5 } }),
+    prisma.class.create({ data: { name: "Class 6", displayOrder: 6 } }),
+    prisma.class.create({ data: { name: "Class 7", displayOrder: 7 } }),
+    prisma.class.create({ data: { name: "Class 8", displayOrder: 8 } }),
     prisma.class.create({ data: { name: "Class 9", displayOrder: 9 } }),
     prisma.class.create({ data: { name: "Class 10", displayOrder: 10 } }),
-    prisma.class.create({ data: { name: "Class 11", displayOrder: 11 } }),
-    prisma.class.create({ data: { name: "Class 12", displayOrder: 12 } }),
   ]);
   console.log(`✅ ${classes.length} classes created.`);
 
-  const sections = await Promise.all([
-    // Class 9
-    prisma.section.create({ data: { name: "A", classId: classes[0].id, capacity: 40 } }),
-    prisma.section.create({ data: { name: "B", classId: classes[0].id, capacity: 40 } }),
-    // Class 10
-    prisma.section.create({ data: { name: "A", classId: classes[1].id, capacity: 40 } }),
-    prisma.section.create({ data: { name: "B", classId: classes[1].id, capacity: 40 } }),
-    // Class 11
-    prisma.section.create({ data: { name: "A", classId: classes[2].id, capacity: 35 } }),
-    // Class 12
-    prisma.section.create({ data: { name: "A", classId: classes[3].id, capacity: 35 } }),
-  ]);
+  const sections = await Promise.all(
+    classes.map((cls) => 
+      prisma.section.create({ data: { name: "General", classId: cls.id, capacity: 40 } })
+    )
+  );
   console.log(`✅ ${sections.length} sections created.`);
 
   // ============================
@@ -203,7 +204,7 @@ async function main() {
     prisma.teacherAssignment.create({
       data: {
         teacherId: teacher1.id,
-        sectionId: sections[0].id, // Class 9A
+        sectionId: sections[10].id, // Class 9A
         subjectId: subjects[0].id, // Mathematics
         academicSessionId: session2025.id,
         isClassTeacher: true,
@@ -213,7 +214,7 @@ async function main() {
     prisma.teacherAssignment.create({
       data: {
         teacherId: teacher2.id,
-        sectionId: sections[0].id, // Class 9A
+        sectionId: sections[10].id, // Class 9A
         subjectId: subjects[1].id, // Science
         academicSessionId: session2025.id,
       },
@@ -222,7 +223,7 @@ async function main() {
     prisma.teacherAssignment.create({
       data: {
         teacherId: teacher1.id,
-        sectionId: sections[2].id, // Class 10A
+        sectionId: sections[11].id, // Class 10A
         subjectId: subjects[0].id, // Mathematics
         academicSessionId: session2025.id,
       },
@@ -241,70 +242,70 @@ async function main() {
       lastName: "Patel",
       gender: "MALE" as const,
       dob: "2010-03-15",
-      section: 0,
+      section: 10,
     }, // Class 9A
     {
       firstName: "Diya",
       lastName: "Sharma",
       gender: "FEMALE" as const,
       dob: "2010-07-22",
-      section: 0,
+      section: 10,
     },
     {
       firstName: "Rohan",
       lastName: "Singh",
       gender: "MALE" as const,
       dob: "2010-01-10",
-      section: 0,
+      section: 10,
     },
     {
       firstName: "Ananya",
       lastName: "Gupta",
       gender: "FEMALE" as const,
       dob: "2010-05-30",
-      section: 0,
+      section: 10,
     },
     {
       firstName: "Arjun",
       lastName: "Mehta",
       gender: "MALE" as const,
       dob: "2010-09-18",
-      section: 0,
+      section: 10,
     },
     {
       firstName: "Kavya",
       lastName: "Nair",
       gender: "FEMALE" as const,
       dob: "2009-11-05",
-      section: 2,
+      section: 11,
     }, // Class 10A
     {
       firstName: "Vivaan",
       lastName: "Kumar",
       gender: "MALE" as const,
       dob: "2009-02-14",
-      section: 2,
+      section: 11,
     },
     {
       firstName: "Ishaan",
       lastName: "Verma",
       gender: "MALE" as const,
       dob: "2009-08-20",
-      section: 2,
+      section: 11,
     },
     {
       firstName: "Aisha",
       lastName: "Khan",
       gender: "FEMALE" as const,
       dob: "2009-04-12",
-      section: 2,
+      section: 11,
     },
     {
       firstName: "Dev",
       lastName: "Joshi",
       gender: "MALE" as const,
       dob: "2009-12-28",
-      section: 2,
+      section: 11,
     },
   ];
 
@@ -508,7 +509,7 @@ async function main() {
 
       attendanceRecords.push({
         studentId: student.id,
-        sectionId: sections[0].id,
+        sectionId: sections[10].id,
         academicSessionId: session2025.id,
         teacherId: teacher1.id,
         date,

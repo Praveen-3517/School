@@ -48,7 +48,7 @@ export default async function EditStudentPage(props: EditStudentPageProps) {
 
   const formattedSections = sections.map(s => ({
     id: s.id,
-    name: `${s.class.name} - ${s.name}`
+    name: `${s.class.name}`
   }));
 
   const initialData = {

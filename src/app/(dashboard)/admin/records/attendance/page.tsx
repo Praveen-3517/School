@@ -126,7 +126,7 @@ export default async function AdminAttendancePage(props: AdminAttendancePageProp
         {/* Step 2: Class/Section */}
         <Card>
           <CardHeader>
-            <CardTitle>2. Class & Section</CardTitle>
+            <CardTitle>2. Class</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2 max-h-[300px] overflow-y-auto">
             {sections.map(section => (
@@ -135,7 +135,7 @@ export default async function AdminAttendancePage(props: AdminAttendancePageProp
                 href={`?date=${selectedDateStr}&sectionId=${section.id}${selectedSubjectId ? `&subjectId=${selectedSubjectId}` : ''}`}
                 className={`block p-2 rounded-md border text-sm transition-colors hover:bg-accent ${selectedSectionId === section.id ? 'border-primary bg-primary/5' : ''}`}
               >
-                Class {section.class.name} - {section.name}
+                Class {section.class.name}
               </Link>
             ))}
           </CardContent>
@@ -177,7 +177,7 @@ export default async function AdminAttendancePage(props: AdminAttendancePageProp
           <CardHeader>
             <CardTitle>Attendance Roster (Admin)</CardTitle>
             <CardDescription>
-              {format(selectedDate, "EEEE, MMMM do, yyyy")} | Class {selectedSection.class.name} - {selectedSection.name} {selectedSubject ? `| ${selectedSubject.name}` : ''}
+              {format(selectedDate, "EEEE, MMMM do, yyyy")} | Class {selectedSection.class.name} {selectedSubject ? `| ${selectedSubject.name}` : ''}
             </CardDescription>
           </CardHeader>
           <CardContent>

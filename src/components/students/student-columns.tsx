@@ -84,7 +84,7 @@ export const studentColumns: ColumnDef<StudentTableType>[] = [
   },
   {
     id: "class",
-    header: "Class & Section",
+    header: "Class",
     cell: ({ row }) => (
       <div>
         {row.original.className} - {row.original.sectionName}

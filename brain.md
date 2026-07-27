@@ -76,6 +76,20 @@
 **Trade-offs**: None.
 **Expected impact**: Administrators can successfully add and edit students by selecting real database-driven class sections.
 
+### July 25, 2026
+**Decision**: Replaced `SingularityBackground` with Aceternity's `Vortex` component across the app.
+**Reason**: User requested a specific "Vortex" background style seen in Aceternity UI.
+**Alternatives considered**: Using `SingularityBackground` with different shader parameters, but the native Vortex Canvas effect using simplex-noise looks distinct.
+**Trade-offs**: Added `framer-motion` and `simplex-noise` dependencies, but visual appeal is significantly higher.
+**Expected impact**: Landing page and Auth layout look spectacular and premium.
+
+### July 25, 2026
+**Decision**: Removed unconditional root redirect from `/` to `/login` in `middleware.ts`.
+**Reason**: The landing page `/` was effectively inaccessible for logged-out users, which prevented them from seeing the new Vortex background presentation.
+**Alternatives considered**: Redirecting only if authenticated.
+**Trade-offs**: None, users can now see the landing page and click a button to go to the portal.
+**Expected impact**: `/` serves as a beautiful public landing page.
+
 ---
 
 ## File History
@@ -124,6 +138,7 @@ The system now includes robust auditing capabilities for administrators (capturi
 The Next.js production build (`pnpm build`) succeeds cleanly with no TypeScript or Lint errors.
 We successfully resolved a series of extremely frustrating Vercel deployment bugs related to Prisma Edge compatibility, Native Node Module compilation errors (`argon2`), and Next.js Middleware infinite redirect loops affecting NextAuth JSON responses.
 The application is currently deployed on Vercel and we are debugging the final post-login redirect flow.
+We have also ported and implemented a stunning `Vortex` interactive Canvas background using `simplex-noise` for the public landing page and login screens.
 
 ---
 

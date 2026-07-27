@@ -113,7 +113,7 @@ export default async function AdminMarksPage(props: AdminMarksPageProps) {
         {/* Step 2: Class/Section */}
         <Card>
           <CardHeader>
-            <CardTitle>2. Class & Section</CardTitle>
+            <CardTitle>2. Class</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2 max-h-[300px] overflow-y-auto">
             {sections.map(section => (
@@ -122,7 +122,7 @@ export default async function AdminMarksPage(props: AdminMarksPageProps) {
                 href={`?${selectedExamId ? `examId=${selectedExamId}&` : ''}sectionId=${section.id}${selectedSubjectId ? `&subjectId=${selectedSubjectId}` : ''}`}
                 className={`block p-2 rounded-md border text-sm transition-colors hover:bg-accent ${selectedSectionId === section.id ? 'border-primary bg-primary/5' : ''}`}
               >
-                Class {section.class.name} - {section.name}
+                Class {section.class.name}
               </Link>
             ))}
           </CardContent>
@@ -152,7 +152,7 @@ export default async function AdminMarksPage(props: AdminMarksPageProps) {
           <CardHeader>
             <CardTitle>Mark Entry Sheet (Admin)</CardTitle>
             <CardDescription>
-              {selectedExam.name} | {selectedSubject.name} | Class {selectedSection.class.name} - {selectedSection.name}
+              {selectedExam.name} | {selectedSubject.name} | Class {selectedSection.class.name}
             </CardDescription>
           </CardHeader>
           <CardContent>

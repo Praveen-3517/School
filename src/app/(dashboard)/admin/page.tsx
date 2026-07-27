@@ -292,7 +292,7 @@ export default async function AdminDashboardPage() {
                           <p className="text-xs text-muted-foreground">
                             {student.enrollmentNumber}
                             {enrollment?.section && (
-                              <> · {enrollment.section.class.name} {enrollment.section.name}</>
+                              <> · {enrollment.section.class.name}</>
                             )}
                           </p>
                         </div>

@@ -71,7 +71,7 @@ export default async function StudentFeeProfilePage({ params }: PageProps) {
           </p>
         </div>
         <Badge variant="outline" className="text-sm py-1 px-3">
-          {enrollment ? `${enrollment.section.class.name} - ${enrollment.section.name}` : "Unassigned"}
+          {enrollment ? `${enrollment.section.class.name}` : "Unassigned"}
         </Badge>
       </div>
 

@@ -66,7 +66,7 @@ export default async function StudentFeesPage() {
                 <tr>
                   <th className="px-4 py-3 font-medium">Enrollment No.</th>
                   <th className="px-4 py-3 font-medium">Student Name</th>
-                  <th className="px-4 py-3 font-medium">Class & Section</th>
+                  <th className="px-4 py-3 font-medium">Class</th>
                   <th className="px-4 py-3 font-medium">Current Fees Status</th>
                   <th className="px-4 py-3 font-medium text-right">Actions</th>
                 </tr>
@@ -99,7 +99,7 @@ export default async function StudentFeesPage() {
                       </td>
                       <td className="px-4 py-3">
                         {enrollment 
-                          ? `${enrollment.section.class.name} - ${enrollment.section.name}`
+                          ? `${enrollment.section.class.name}`
                           : "Unassigned"}
                       </td>
                       <td className="px-4 py-3">

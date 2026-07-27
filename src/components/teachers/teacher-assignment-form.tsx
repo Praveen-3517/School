@@ -121,7 +121,7 @@ export function TeacherAssignmentForm({ teacherId, subjects, sections, currentAs
             </Select>
           </div>
           <div className="space-y-2 flex-1">
-            <label className="text-sm font-medium">Class & Section</label>
+            <label className="text-sm font-medium">Class</label>
             <Select value={selectedSection} onValueChange={(val) => setSelectedSection(val || "")}>
               <SelectTrigger>
                 <SelectValue placeholder="Select Section" />
@@ -152,7 +152,7 @@ export function TeacherAssignmentForm({ teacherId, subjects, sections, currentAs
                 <TableHeader>
                   <TableRow>
                     <TableHead>Subject</TableHead>
-                    <TableHead>Class & Section</TableHead>
+                    <TableHead>Class</TableHead>
                     <TableHead>Academic Session</TableHead>
                     <TableHead className="w-[100px] text-right">Actions</TableHead>
                   </TableRow>
@@ -164,7 +164,7 @@ export function TeacherAssignmentForm({ teacherId, subjects, sections, currentAs
                         {assignment.subject.name} <span className="text-muted-foreground text-xs ml-1">({assignment.subject.code})</span>
                       </TableCell>
                       <TableCell>
-                        Class {assignment.section.class.name} - {assignment.section.name}
+                        Class {assignment.section.class.name}
                       </TableCell>
                       <TableCell>
                         <Badge variant="outline">{assignment.academicSession}</Badge>
