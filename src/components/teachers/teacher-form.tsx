@@ -76,7 +76,7 @@ export function TeacherForm({ initialData }: { initialData?: Partial<TeacherForm
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>First Name *</FormLabel>
+                  <FormLabel>First Name</FormLabel>
                   <FormControl>
                     <Input placeholder="John" {...field} />
                   </FormControl>
@@ -89,7 +89,7 @@ export function TeacherForm({ initialData }: { initialData?: Partial<TeacherForm
               name="lastName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Last Name *</FormLabel>
+                  <FormLabel>Last Name</FormLabel>
                   <FormControl>
                     <Input placeholder="Doe" {...field} />
                   </FormControl>
@@ -102,7 +102,7 @@ export function TeacherForm({ initialData }: { initialData?: Partial<TeacherForm
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email Address *</FormLabel>
+                  <FormLabel>Email Address</FormLabel>
                   <FormControl>
                     <Input placeholder="teacher@example.com" type="email" {...field} />
                   </FormControl>
@@ -138,7 +138,7 @@ export function TeacherForm({ initialData }: { initialData?: Partial<TeacherForm
               name="employeeId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Employee ID *</FormLabel>
+                  <FormLabel>Employee ID</FormLabel>
                   <FormControl>
                     <Input placeholder="EMP-2025-001" {...field} />
                   </FormControl>
@@ -151,7 +151,7 @@ export function TeacherForm({ initialData }: { initialData?: Partial<TeacherForm
               name="department"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Department *</FormLabel>
+                  <FormLabel>Department</FormLabel>
                   <FormControl>
                     <Input placeholder="Science" {...field} />
                   </FormControl>
@@ -164,7 +164,7 @@ export function TeacherForm({ initialData }: { initialData?: Partial<TeacherForm
               name="designation"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Designation *</FormLabel>
+                  <FormLabel>Designation</FormLabel>
                   <FormControl>
                     <Input placeholder="Senior Teacher" {...field} />
                   </FormControl>
@@ -177,7 +177,7 @@ export function TeacherForm({ initialData }: { initialData?: Partial<TeacherForm
               name="joinedAt"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Joining Date *</FormLabel>
+                  <FormLabel>Joining Date</FormLabel>
                   <FormControl>
                     <Input type="date" {...field} />
                   </FormControl>

@@ -17,10 +17,16 @@ export async function createTeacher(data: TeacherFormValues) {
       return { success: false, error: "Invalid form data" };
     }
 
-    const {
-      firstName, lastName, email, phone,
-      employeeId, department, designation, joinedAt, isActive
-    } = parsed.data;
+    // Assign fallback values
+    const firstName = parsed.data.firstName || "Unknown";
+    const lastName = parsed.data.lastName || "Teacher";
+    const email = parsed.data.email || `teacher_${Date.now()}@school.local`;
+    const phone = parsed.data.phone || null;
+    const employeeId = parsed.data.employeeId || `EMP-${Date.now()}`;
+    const department = parsed.data.department || "General";
+    const designation = parsed.data.designation || "Teacher";
+    const joinedAt = parsed.data.joinedAt ? new Date(parsed.data.joinedAt) : new Date();
+    const isActive = parsed.data.isActive ?? true;
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
@@ -40,7 +46,7 @@ export async function createTeacher(data: TeacherFormValues) {
       // 1. Create Base User
       const user = await tx.user.create({
         data: {
-          name: `${firstName} ${lastName}`,
+          name: `${firstName} ${lastName}`.trim(),
           email,
           passwordHash,
           role: "TEACHER" as Role,
@@ -55,8 +61,8 @@ export async function createTeacher(data: TeacherFormValues) {
           employeeId,
           qualification: "", // Add default or modify form if needed
           specialization: department, // Map department to specialization or similar
-          phone: phone || null,
-          joiningDate: new Date(joinedAt),
+          phone,
+          joiningDate: joinedAt,
         },
       });
     });

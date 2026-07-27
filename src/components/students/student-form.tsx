@@ -95,7 +95,7 @@ export function StudentForm({
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>First Name *</FormLabel>
+                  <FormLabel>First Name</FormLabel>
                   <FormControl>
                     <Input placeholder="John" {...field} />
                   </FormControl>
@@ -108,7 +108,7 @@ export function StudentForm({
               name="lastName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Last Name *</FormLabel>
+                  <FormLabel>Last Name</FormLabel>
                   <FormControl>
                     <Input placeholder="Doe" {...field} />
                   </FormControl>
@@ -121,7 +121,7 @@ export function StudentForm({
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email Address *</FormLabel>
+                  <FormLabel>Email Address</FormLabel>
                   <FormControl>
                     <Input placeholder="student@example.com" type="email" {...field} />
                   </FormControl>
@@ -147,7 +147,7 @@ export function StudentForm({
               name="dateOfBirth"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Date of Birth *</FormLabel>
+                  <FormLabel>Date of Birth</FormLabel>
                   <FormControl>
                     <Input type="date" {...field} />
                   </FormControl>
@@ -173,7 +173,7 @@ export function StudentForm({
               name="address"
               render={({ field }) => (
                 <FormItem className="md:col-span-2">
-                  <FormLabel>Address *</FormLabel>
+                  <FormLabel>Address</FormLabel>
                   <FormControl>
                     <Input placeholder="123 Main St..." {...field} />
                   </FormControl>
@@ -196,7 +196,7 @@ export function StudentForm({
               name="guardianName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Guardian Name *</FormLabel>
+                  <FormLabel>Guardian Name</FormLabel>
                   <FormControl>
                     <Input placeholder="Jane Doe" {...field} />
                   </FormControl>
@@ -209,7 +209,7 @@ export function StudentForm({
               name="guardianRelation"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Relation *</FormLabel>
+                  <FormLabel>Relation</FormLabel>
                   <FormControl>
                     <Input placeholder="Mother" {...field} />
                   </FormControl>
@@ -222,7 +222,7 @@ export function StudentForm({
               name="guardianPhone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Guardian Phone *</FormLabel>
+                  <FormLabel>Guardian Phone</FormLabel>
                   <FormControl>
                     <Input placeholder="+1234567890" {...field} />
                   </FormControl>
@@ -258,7 +258,7 @@ export function StudentForm({
               name="admissionNumber"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Admission Number *</FormLabel>
+                  <FormLabel>Admission Number</FormLabel>
                   <FormControl>
                     <Input placeholder="ADM-2025-001" {...field} />
                   </FormControl>
@@ -271,7 +271,7 @@ export function StudentForm({
               name="enrollmentNumber"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Enrollment Number *</FormLabel>
+                  <FormLabel>Enrollment Number</FormLabel>
                   <FormControl>
                     <Input placeholder="ENR-2025-001" {...field} />
                   </FormControl>
@@ -284,7 +284,7 @@ export function StudentForm({
               name="admissionDate"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Admission Date *</FormLabel>
+                  <FormLabel>Admission Date</FormLabel>
                   <FormControl>
                     <Input type="date" {...field} />
                   </FormControl>
@@ -297,7 +297,7 @@ export function StudentForm({
               name="sectionId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Class *</FormLabel>
+                  <FormLabel>Class</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>

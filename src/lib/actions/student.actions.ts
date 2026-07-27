@@ -7,24 +7,37 @@ import { logAuditEvent } from "@/lib/audit";
 import { revalidatePath } from "next/cache";
 import { hashPassword } from "@/lib/auth/password";
 import type { Role } from "@/types/enums";
+import { v4 as uuidv4 } from "uuid";
 
 export async function createStudent(data: StudentFormValues) {
   try {
     const session = await requireAdmin();
     
-    // Validate the input data
     const parsed = studentSchema.safeParse(data);
     if (!parsed.success) {
       return { success: false, error: "Invalid form data" };
     }
 
-    const {
-      firstName, lastName, email, phone, dateOfBirth, bloodGroup, address,
-      guardianName, guardianRelation, guardianPhone, guardianEmail,
-      admissionNumber, enrollmentNumber, admissionDate, sectionId, status
-    } = parsed.data;
+    // Assign fallback values for missing optional fields
+    const firstName = parsed.data.firstName || "Unknown";
+    const lastName = parsed.data.lastName || "Student";
+    const email = parsed.data.email || `student_${Date.now()}@school.local`;
+    const phone = parsed.data.phone || null;
+    const dateOfBirth = parsed.data.dateOfBirth ? new Date(parsed.data.dateOfBirth) : new Date("2010-01-01");
+    const bloodGroup = parsed.data.bloodGroup || "UNKNOWN";
+    const address = parsed.data.address || "Address not provided";
+    
+    const guardianName = parsed.data.guardianName || "Not Provided";
+    const guardianRelation = parsed.data.guardianRelation || "Parent";
+    const guardianPhone = parsed.data.guardianPhone || "0000000000";
+    const guardianEmail = parsed.data.guardianEmail || null;
+    
+    const admissionNumber = parsed.data.admissionNumber || `ADM-${Date.now()}`;
+    const enrollmentNumber = parsed.data.enrollmentNumber || `ENR-${Date.now()}`;
+    const admissionDate = parsed.data.admissionDate ? new Date(parsed.data.admissionDate) : new Date();
+    const sectionId = parsed.data.sectionId || null;
+    const status = parsed.data.status || "ACTIVE";
 
-    // Check if user already exists
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
@@ -33,16 +46,14 @@ export async function createStudent(data: StudentFormValues) {
       return { success: false, error: "User with this email already exists" };
     }
 
-    // Default password is Enrollment Number or a standard default
     const defaultPassword = enrollmentNumber;
     const passwordHash = await hashPassword(defaultPassword);
 
-    // Create User, Student, GuardianInfo, Profile, and initial Enrollment in a transaction
     await prisma.$transaction(async (tx) => {
       // 1. Create Base User
       const user = await tx.user.create({
         data: {
-          name: `${firstName} ${lastName}`,
+          name: `${firstName} ${lastName}`.trim(),
           email,
           passwordHash,
           role: "STUDENT" as Role,
@@ -55,7 +66,7 @@ export async function createStudent(data: StudentFormValues) {
           userId: user.id,
           enrollmentNumber,
           admissionNumber,
-          admissionDate: new Date(admissionDate),
+          admissionDate,
           status,
         },
       });
@@ -66,10 +77,10 @@ export async function createStudent(data: StudentFormValues) {
           studentId: student.id,
           firstName,
           lastName,
-          dateOfBirth: new Date(dateOfBirth),
+          dateOfBirth,
           gender: "PREFER_NOT_TO_SAY",
-          bloodGroup: bloodGroup || "UNKNOWN",
-          phone: phone || null,
+          bloodGroup,
+          phone,
           address,
         },
       });
@@ -78,46 +89,36 @@ export async function createStudent(data: StudentFormValues) {
       await tx.guardianInfo.create({
         data: {
           studentId: student.id,
-          guardianName: guardianName,
+          guardianName,
           relationship: guardianRelation,
-          guardianPhone: guardianPhone,
-          guardianEmail: guardianEmail || null,
+          guardianPhone,
+          guardianEmail,
         },
       });
 
-      // 5. Enroll in section
-      // Get academic session (assuming active one, or fetching from section)
-      const section = await tx.section.findUnique({
-        where: { id: sectionId },
-        include: { class: true }
-      });
-      
-      if (!section) throw new Error("Section not found");
-
-      // Fetch active session
-      let academicSession = await tx.academicSession.findFirst({
-        where: { isCurrent: true }
-      });
-
-      if (!academicSession) {
-        // Fallback if no active session
-        academicSession = await tx.academicSession.findFirst({
-          orderBy: { startDate: 'desc' }
+      // 5. Enroll in section if provided
+      if (sectionId) {
+        let academicSession = await tx.academicSession.findFirst({
+          where: { isCurrent: true }
         });
-      }
 
-      if (!academicSession) {
-        throw new Error("No academic session found in the system");
-      }
+        if (!academicSession) {
+          academicSession = await tx.academicSession.findFirst({
+            orderBy: { startDate: 'desc' }
+          });
+        }
 
-      await tx.studentEnrollment.create({
-        data: {
-          studentId: student.id,
-          sectionId,
-          academicSessionId: academicSession.id,
-          isActive: true,
-        },
-      });
+        if (academicSession) {
+          await tx.studentEnrollment.create({
+            data: {
+              studentId: student.id,
+              sectionId,
+              academicSessionId: academicSession.id,
+              isActive: true,
+            },
+          });
+        }
+      }
     });
 
     await logAuditEvent({
