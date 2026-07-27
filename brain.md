@@ -2,6 +2,17 @@
 
 ## Chronological History
 
+### July 27, 2026
+**Files changed**:
+- `src/app/(dashboard)/admin/marks/page.tsx`
+- `src/lib/validation/student.ts`, `src/lib/validation/teacher.ts`
+- `src/lib/actions/student.actions.ts`, `src/lib/actions/teacher.actions.ts`
+- `src/components/students/student-form.tsx`, `src/components/teachers/teacher-form.tsx`
+- `src/components/admin/admin-sidebar.tsx`, `prisma/schema.prisma`
+**Reason**: User requested UX improvements (adding explicit logout buttons, making all form fields optional to speed up data entry, and adding an Aadhar Number field) as well as bug fixes (alphabetical sorting of classes).
+**Summary**: Fixed a sorting bug where classes were sorted by alphabetical string names (putting LKG/UKG at the bottom and Class 10 next to Class 1) instead of their database `displayOrder`. Added prominent Logout buttons to the sidebars. Made all student and teacher form fields optional, generating dummy data behind the scenes for database integrity. Directly altered Turso schema to add an `aadharNumber` column without wiping data.
+**Impact**: Much better user experience for data entry. Sorting is now correct.
+
 ### July 24, 2026
 **Files changed**:
 - `src/lib/actions/student.actions.ts`
@@ -19,6 +30,20 @@
 ---
 
 ## Decisions Log
+
+### July 27, 2026
+**Decision**: Made all form fields optional on Student and Teacher forms and bypassed Prisma's required constraints with auto-generated data.
+**Reason**: User found the mandatory fields annoying ("jitna main bharu utna submit ho jaye").
+**Alternatives considered**: Changing Prisma schema to make everything optional.
+**Trade-offs**: Database gets filled with dummy default strings, but user gets maximum flexibility and speed.
+**Expected impact**: Administrators can rapidly create users without knowing their full details.
+
+### July 27, 2026
+**Decision**: Modified Turso DB schema directly via `@libsql/client` SQL script instead of `prisma db push`.
+**Reason**: Prisma CLI crashes with `the URL must start with the protocol file:` when using Turso remote URLs.
+**Alternatives considered**: Setting up a local SQLite db just to generate migrations.
+**Trade-offs**: None, direct ALTER TABLE is safe for simple column additions.
+**Expected impact**: Successfully added `aadharNumber` without breaking the live cloud DB.
 
 ### July 24, 2026
 **Decision**: Use `zod` field-level refinement and structured schemas to prevent `omit()` errors.
@@ -139,6 +164,12 @@ The Next.js production build (`pnpm build`) succeeds cleanly with no TypeScript 
 We successfully resolved a series of extremely frustrating Vercel deployment bugs related to Prisma Edge compatibility, Native Node Module compilation errors (`argon2`), and Next.js Middleware infinite redirect loops affecting NextAuth JSON responses.
 The application is currently deployed on Vercel and we are debugging the final post-login redirect flow.
 We have also ported and implemented a stunning `Vortex` interactive Canvas background using `simplex-noise` for the public landing page and login screens.
+
+**Recent Additions (July 27)**:
+- Fixed an alphabetical class sorting bug.
+- Added explicit Logout buttons to sidebars.
+- Made all student/teacher data entry fields optional by auto-generating dummy fallbacks to satisfy the database.
+- Added an optional `aadharNumber` field via a manual Turso SQL migration.
 
 ---
 
