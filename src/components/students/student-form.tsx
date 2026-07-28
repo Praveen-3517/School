@@ -59,7 +59,7 @@ export function StudentForm({
       guardianEmail: "",
       admissionNumber: "",
       enrollmentNumber: "",
-      admissionDate: new Date().toISOString().split('T')[0],
+      admissionDate: "",
       sectionId: "",
       status: "ACTIVE",
     },
@@ -92,7 +92,7 @@ export function StudentForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8" autoComplete="off">
         
         {/* Personal Details */}
         <Card>
