@@ -1,7 +1,7 @@
 "use client";
 
 import { signOut } from "next-auth/react";
-import { Bell, Moon, Sun, LogOut, Settings } from "lucide-react";
+import { Bell, Moon, Sun, LogOut, User } from "lucide-react";
 import { useTheme } from "next-themes";
 import {
   DropdownMenu,
@@ -86,8 +86,8 @@ export function AdminTopbar({ user }: AdminTopbarProps) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => router.push("/admin/settings")}>
-              <Settings className="mr-2 h-4 w-4" />
-              Settings
+              <User className="mr-2 h-4 w-4" />
+              Profile
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
@@ -95,7 +95,7 @@ export function AdminTopbar({ user }: AdminTopbarProps) {
               variant="destructive"
             >
               <LogOut className="mr-2 h-4 w-4" />
-              Sign Out
+              Logout
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
