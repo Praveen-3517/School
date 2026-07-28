@@ -93,7 +93,7 @@ export default async function StudentsPage({ searchParams }: StudentsPageProps) 
       aadharNumber: s.profile?.aadharNumber || "N/A",
       admissionNumber: s.admissionNumber,
       status: s.status as StudentStatus,
-      email: s.user?.email || "N/A",
+      email: s.user?.email && !s.user.email.includes("@school.local") && !s.user.email.includes("@edumanage.internal") && !s.user.email.startsWith("__HIDDEN") ? s.user.email : "",
       phone: s.profile?.phone || "N/A",
       className: activeEnrollment?.section?.class?.name || "Not Assigned",
       sectionName: activeEnrollment?.section?.name || "",

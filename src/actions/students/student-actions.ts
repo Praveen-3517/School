@@ -79,7 +79,7 @@ export async function createStudentAction(data: CreateStudentInput) {
       const user = await tx.user.create({
         data: {
           name: `${firstName} ${lastName}`,
-          email: email || `${enrollmentNumber.toLowerCase()}@edumanage.internal`,
+          email: email || `__HIDDEN_EMAIL__${Date.now()}@edumanage.internal`,
           username: enrollmentNumber,
           passwordHash,
           role: "STUDENT",
@@ -200,6 +200,13 @@ export async function updateStudentAction(
           enrollmentNumber: (data as any).enrollmentNumber || `__HIDDEN_ENR__${Date.now()}`,
           admissionNumber: (data as any).admissionNumber || `__HIDDEN_ADM__${Date.now()}`,
         }
+      });
+      
+      // Update User email
+      const newEmail = validated.data.email || `__HIDDEN_EMAIL__${Date.now()}@school.local`;
+      await tx.user.update({
+        where: { id: student.userId },
+        data: { email: newEmail }
       });
 
       if (student.profile) {

@@ -20,7 +20,7 @@ export async function createStudent(data: StudentFormValues) {
     // Assign fallback values for missing optional fields
     const firstName = parsed.data.firstName || "";
     const lastName = parsed.data.lastName || "";
-    const email = parsed.data.email || `student_${Date.now()}@school.local`;
+    const email = parsed.data.email || `__HIDDEN_EMAIL__${Date.now()}@school.local`;
     const phone = parsed.data.phone || null;
     const aadharNumber = parsed.data.aadharNumber || null;
     const dateOfBirth = parsed.data.dateOfBirth ? new Date(parsed.data.dateOfBirth) : new Date("2010-01-01");

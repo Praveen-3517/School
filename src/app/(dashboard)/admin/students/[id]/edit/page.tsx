@@ -54,7 +54,7 @@ export default async function EditStudentPage(props: EditStudentPageProps) {
   const initialData = {
     firstName: student.profile.firstName,
     lastName: student.profile.lastName,
-    email: student.user.email,
+    email: student.user.email.includes("@school.local") || student.user.email.includes("@edumanage.internal") || student.user.email.startsWith("__HIDDEN") ? "" : student.user.email,
     phone: student.profile.phone || "",
     dateOfBirth: student.profile.dateOfBirth.toISOString().split('T')[0],
     bloodGroup: student.profile.bloodGroup || "",
