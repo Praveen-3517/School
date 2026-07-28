@@ -32,8 +32,8 @@ export async function createStudent(data: StudentFormValues) {
     const guardianPhone = parsed.data.guardianPhone || null;
     const guardianEmail = parsed.data.guardianEmail || null;
     
-    const admissionNumber = parsed.data.admissionNumber || `ADM-${Date.now()}`;
-    const enrollmentNumber = parsed.data.enrollmentNumber || `ENR-${Date.now()}`;
+    const admissionNumber = parsed.data.admissionNumber || `__HIDDEN_ADM__${Date.now()}`;
+    const enrollmentNumber = parsed.data.enrollmentNumber || `__HIDDEN_ENR__${Date.now()}`;
     const admissionDate = parsed.data.admissionDate ? new Date(parsed.data.admissionDate) : new Date();
     const sectionId = parsed.data.sectionId || null;
     const status = parsed.data.status || "ACTIVE";

@@ -63,8 +63,8 @@ export default async function EditStudentPage(props: EditStudentPageProps) {
     guardianRelation: student.guardian.relationship || "Father",
     guardianPhone: student.guardian.fatherPhone || student.guardian.guardianPhone || "",
     guardianEmail: student.guardian.fatherEmail || student.guardian.guardianEmail || "",
-    admissionNumber: student.admissionNumber,
-    enrollmentNumber: student.enrollmentNumber,
+    admissionNumber: student.admissionNumber.startsWith("__HIDDEN") ? "" : student.admissionNumber,
+    enrollmentNumber: student.enrollmentNumber.startsWith("__HIDDEN") ? "" : student.enrollmentNumber,
     admissionDate: student.admissionDate.toISOString().split('T')[0],
     sectionId: student.enrollments[0]?.sectionId || "",
     status: student.status as any,
@@ -83,7 +83,7 @@ export default async function EditStudentPage(props: EditStudentPageProps) {
       </div>
       
       <div className="max-w-4xl">
-        <StudentForm initialData={initialData} sections={formattedSections} />
+        <StudentForm initialData={initialData} sections={formattedSections} studentId={student.id} />
       </div>
     </div>
   );

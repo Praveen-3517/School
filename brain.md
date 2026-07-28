@@ -179,6 +179,9 @@ We have also ported and implemented a stunning `NeuralBg` interactive WebGL back
 - Made all student/teacher data entry fields optional by auto-generating dummy fallbacks to satisfy the database.
 - Added an optional `aadharNumber` field via a manual Turso SQL migration.
 - Replaced Aceternity/Inspira-UI cursor/vortex backgrounds with a highly optimized WebGL `NeuralBg` component on the authentication layout.
+- Added "Aadhar Number" to the Students table and made it searchable instead of Enrollment No.
+- Added a "Delete Student" action in the row dropdown menu.
+- Sped up client-side student search (reduced debounce time to 100ms).
 
 ---
 

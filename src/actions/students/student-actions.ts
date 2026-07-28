@@ -189,10 +189,19 @@ export async function updateStudentAction(
   });
   if (!student) return { success: false, error: "Student not found." };
 
-  try {
+    try {
     const previousData = student.profile ?? {};
 
     await prisma.$transaction(async (tx) => {
+      // Also update the core Student record's numbers
+      await tx.student.update({
+        where: { id: studentId },
+        data: {
+          enrollmentNumber: validated.data.enrollmentNumber || `__HIDDEN_ENR__${Date.now()}`,
+          admissionNumber: validated.data.admissionNumber || `__HIDDEN_ADM__${Date.now()}`,
+        }
+      });
+
       if (student.profile) {
         await tx.studentProfile.update({
           where: { studentId },

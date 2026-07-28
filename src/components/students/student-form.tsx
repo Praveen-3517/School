@@ -30,10 +30,12 @@ import { Loader2 } from "lucide-react";
 
 export function StudentForm({ 
   initialData,
-  sections
+  sections,
+  studentId
 }: { 
   initialData?: Partial<StudentFormValues>;
   sections: { id: string; name: string }[];
+  studentId?: string;
 }) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -64,8 +66,14 @@ export function StudentForm({
   async function onSubmit(data: StudentFormValues) {
     setIsSubmitting(true);
     try {
-      // If initialData exists, we should ideally call updateStudent, but for now we'll just handle create
-      const result = await createStudent(data);
+      let result;
+      if (studentId) {
+        const { updateStudentAction } = await import("@/actions/students/student-actions");
+        result = await updateStudentAction(studentId, data as any);
+      } else {
+        result = await createStudent(data);
+      }
+      
       if (result.success) {
         toast.success(initialData ? "Student updated successfully" : "Student created successfully");
         router.push("/admin/students");
