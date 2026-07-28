@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select";
 import { Search, X } from "lucide-react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useTransition } from "react";
 import { useDebounce } from "@/hooks/use-debounce";
 
 export function StudentFilters() {
@@ -25,7 +25,8 @@ export function StudentFilters() {
   const [query, setQuery] = useState(initialQuery);
   const [status, setStatus] = useState(initialStatus);
 
-  const debouncedQuery = useDebounce(query, 100);
+  const [isPending, startTransition] = useTransition();
+  const debouncedQuery = useDebounce(query, 500);
 
   // Apply filters to URL
   const applyFilters = useCallback(
@@ -47,7 +48,9 @@ export function StudentFilters() {
       // Reset to page 1 when filtering
       params.delete("page");
 
-      router.push(`${pathname}?${params.toString()}`);
+      startTransition(() => {
+        router.push(`${pathname}?${params.toString()}`);
+      });
     },
     [pathname, router, searchParams]
   );

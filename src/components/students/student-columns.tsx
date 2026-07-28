@@ -121,49 +121,31 @@ export const studentColumns: ColumnDef<StudentTableType>[] = [
   },
   {
     id: "actions",
+    header: "Actions",
     cell: ({ row }) => {
       const student = row.original;
 
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger className={buttonVariants({ variant: "ghost", className: "h-8 w-8 p-0" })}>
-            <span className="sr-only">Open menu</span>
-            <MoreHorizontal className="h-4 w-4" />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(student.aadharNumber)}
-            >
-              Copy Aadhar No.
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem render={<Link href={`/admin/students/${student.id}/edit`} />}>
-              Edit Details
-            </DropdownMenuItem>
-            <DropdownMenuItem 
-              className="text-red-600 focus:bg-red-50 focus:text-red-600 cursor-pointer"
-              onClick={async () => {
-                if (confirm("Are you sure you want to delete this student? This action cannot be undone.")) {
-                  const { deleteStudent } = await import("@/lib/actions/student.actions");
-                  await deleteStudent(student.id);
-                }
-              }}
-            >
-              Delete Student
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem render={<Link href={`/admin/students/${student.id}`} />}>
-              View Profile
-            </DropdownMenuItem>
-            <DropdownMenuItem render={<Link href={`/admin/students/${student.id}/attendance`} />}>
-              Attendance
-            </DropdownMenuItem>
-            <DropdownMenuItem render={<Link href={`/admin/students/${student.id}/marks`} />}>
-              Marks
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex items-center gap-2">
+          <Link 
+            href={`/admin/students/${student.id}/edit`}
+            className={buttonVariants({ variant: "outline", size: "sm" })}
+          >
+            Edit
+          </Link>
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={async () => {
+              if (confirm("Are you sure you want to delete this student? This action cannot be undone.")) {
+                const { deleteStudent } = await import("@/lib/actions/student.actions");
+                await deleteStudent(student.id);
+              }
+            }}
+          >
+            Delete
+          </Button>
+        </div>
       );
     },
   },
