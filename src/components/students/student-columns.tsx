@@ -138,10 +138,8 @@ export const studentColumns: ColumnDef<StudentTableType>[] = [
               Copy Aadhar No.
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href={`/admin/students/${student.id}/edit`}>
-                Edit Details
-              </Link>
+            <DropdownMenuItem render={<Link href={`/admin/students/${student.id}/edit`} />}>
+              Edit Details
             </DropdownMenuItem>
             <DropdownMenuItem 
               className="text-red-600 focus:bg-red-50 focus:text-red-600 cursor-pointer"
@@ -155,20 +153,14 @@ export const studentColumns: ColumnDef<StudentTableType>[] = [
               Delete Student
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href={`/admin/students/${student.id}`}>
-                View Profile
-              </Link>
+            <DropdownMenuItem render={<Link href={`/admin/students/${student.id}`} />}>
+              View Profile
             </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={`/admin/students/${student.id}/attendance`}>
-                Attendance
-              </Link>
+            <DropdownMenuItem render={<Link href={`/admin/students/${student.id}/attendance`} />}>
+              Attendance
             </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={`/admin/students/${student.id}/marks`}>
-                Marks
-              </Link>
+            <DropdownMenuItem render={<Link href={`/admin/students/${student.id}/marks`} />}>
+              Marks
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
