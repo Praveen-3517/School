@@ -43,6 +43,7 @@ export default async function StudentsPage({ searchParams }: StudentsPageProps) 
     where.OR = [
       { profile: { firstName: { contains: params.query } } },
       { profile: { lastName: { contains: params.query } } },
+      { profile: { aadharNumber: { contains: params.query } } },
       { enrollmentNumber: { contains: params.query } },
       { admissionNumber: { contains: params.query } },
     ];
@@ -89,7 +90,7 @@ export default async function StudentsPage({ searchParams }: StudentsPageProps) 
       id: s.id,
       firstName: s.profile?.firstName || "Unknown",
       lastName: s.profile?.lastName || "",
-      enrollmentNumber: s.enrollmentNumber,
+      aadharNumber: s.profile?.aadharNumber || "N/A",
       admissionNumber: s.admissionNumber,
       status: s.status as StudentStatus,
       email: s.user?.email || "N/A",

@@ -18,18 +18,18 @@ export async function createStudent(data: StudentFormValues) {
     }
 
     // Assign fallback values for missing optional fields
-    const firstName = parsed.data.firstName || "Unknown";
-    const lastName = parsed.data.lastName || "Student";
+    const firstName = parsed.data.firstName || "";
+    const lastName = parsed.data.lastName || "";
     const email = parsed.data.email || `student_${Date.now()}@school.local`;
     const phone = parsed.data.phone || null;
     const aadharNumber = parsed.data.aadharNumber || null;
     const dateOfBirth = parsed.data.dateOfBirth ? new Date(parsed.data.dateOfBirth) : new Date("2010-01-01");
     const bloodGroup = parsed.data.bloodGroup || "UNKNOWN";
-    const address = parsed.data.address || "Address not provided";
+    const address = parsed.data.address || null;
     
-    const guardianName = parsed.data.guardianName || "Not Provided";
-    const guardianRelation = parsed.data.guardianRelation || "Parent";
-    const guardianPhone = parsed.data.guardianPhone || "0000000000";
+    const guardianName = parsed.data.guardianName || null;
+    const guardianRelation = parsed.data.guardianRelation || null;
+    const guardianPhone = parsed.data.guardianPhone || null;
     const guardianEmail = parsed.data.guardianEmail || null;
     
     const admissionNumber = parsed.data.admissionNumber || `ADM-${Date.now()}`;
@@ -136,5 +136,31 @@ export async function createStudent(data: StudentFormValues) {
       return { success: false, error: "Enrollment number or Admission number already exists" };
     }
     return { success: false, error: error.message || "Failed to create student" };
+  }
+}
+
+export async function deleteStudent(studentId: string) {
+  try {
+    await requireAdmin();
+    
+    const student = await prisma.student.findUnique({ where: { id: studentId } });
+    if (!student) return { success: false, error: "Student not found" };
+
+    await prisma.user.delete({
+      where: { id: student.userId }
+    });
+
+    await logAuditEvent({
+      action: "DELETE",
+      entityType: "Student",
+      entityId: studentId,
+      newData: { deleted: true },
+    });
+
+    revalidatePath("/admin/students");
+    return { success: true };
+  } catch (error: any) {
+    console.error("Error deleting student:", error);
+    return { success: false, error: "Failed to delete student" };
   }
 }

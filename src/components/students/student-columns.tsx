@@ -21,7 +21,7 @@ export type StudentTableType = {
   id: string;
   firstName: string;
   lastName: string;
-  enrollmentNumber: string;
+  aadharNumber: string;
   admissionNumber: string;
   status: StudentStatus;
   email: string;
@@ -53,10 +53,10 @@ export const studentColumns: ColumnDef<StudentTableType>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "enrollmentNumber",
-    header: "Enrollment No.",
+    accessorKey: "aadharNumber",
+    header: "Aadhar No.",
     cell: ({ row }) => (
-      <div className="font-medium">{row.getValue("enrollmentNumber")}</div>
+      <div className="font-medium">{row.getValue("aadharNumber") || "N/A"}</div>
     ),
   },
   {
@@ -133,22 +133,42 @@ export const studentColumns: ColumnDef<StudentTableType>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(student.enrollmentNumber)}
+              onClick={() => navigator.clipboard.writeText(student.aadharNumber)}
             >
-              Copy Enrollment No.
+              Copy Aadhar No.
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem render={<Link href={`/admin/students/${student.id}`} />}>
-              View Profile
+            <DropdownMenuItem asChild>
+              <Link href={`/admin/students/${student.id}/edit`}>
+                Edit Details
+              </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem render={<Link href={`/admin/students/${student.id}/edit`} />}>
-              Edit Details
+            <DropdownMenuItem 
+              className="text-red-600 focus:bg-red-50 focus:text-red-600 cursor-pointer"
+              onClick={async () => {
+                if (confirm("Are you sure you want to delete this student? This action cannot be undone.")) {
+                  const { deleteStudent } = await import("@/lib/actions/student.actions");
+                  await deleteStudent(student.id);
+                }
+              }}
+            >
+              Delete Student
             </DropdownMenuItem>
-            <DropdownMenuItem render={<Link href={`/admin/students/${student.id}/attendance`} />}>
-              Attendance
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <Link href={`/admin/students/${student.id}`}>
+                View Profile
+              </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem render={<Link href={`/admin/students/${student.id}/marks`} />}>
-              Marks
+            <DropdownMenuItem asChild>
+              <Link href={`/admin/students/${student.id}/attendance`}>
+                Attendance
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href={`/admin/students/${student.id}/marks`}>
+                Marks
+              </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

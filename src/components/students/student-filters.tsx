@@ -25,7 +25,7 @@ export function StudentFilters() {
   const [query, setQuery] = useState(initialQuery);
   const [status, setStatus] = useState(initialStatus);
 
-  const debouncedQuery = useDebounce(query, 300);
+  const debouncedQuery = useDebounce(query, 100);
 
   // Apply filters to URL
   const applyFilters = useCallback(

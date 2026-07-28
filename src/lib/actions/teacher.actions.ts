@@ -18,8 +18,8 @@ export async function createTeacher(data: TeacherFormValues) {
     }
 
     // Assign fallback values
-    const firstName = parsed.data.firstName || "Unknown";
-    const lastName = parsed.data.lastName || "Teacher";
+    const firstName = parsed.data.firstName || "";
+    const lastName = parsed.data.lastName || "";
     const email = parsed.data.email || `teacher_${Date.now()}@school.local`;
     const phone = parsed.data.phone || null;
     const employeeId = parsed.data.employeeId || `EMP-${Date.now()}`;
