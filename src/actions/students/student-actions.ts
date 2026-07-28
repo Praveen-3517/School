@@ -197,8 +197,8 @@ export async function updateStudentAction(
       await tx.student.update({
         where: { id: studentId },
         data: {
-          enrollmentNumber: validated.data.enrollmentNumber || `__HIDDEN_ENR__${Date.now()}`,
-          admissionNumber: validated.data.admissionNumber || `__HIDDEN_ADM__${Date.now()}`,
+          enrollmentNumber: (data as any).enrollmentNumber || `__HIDDEN_ENR__${Date.now()}`,
+          admissionNumber: (data as any).admissionNumber || `__HIDDEN_ADM__${Date.now()}`,
         }
       });
 
