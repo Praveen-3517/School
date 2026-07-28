@@ -88,16 +88,20 @@ export function AdminTopbar({ user }: AdminTopbarProps) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => router.push("/admin/settings")}>
-              <User className="mr-2 h-4 w-4" />
-              Profile
+              <span className="flex items-center w-full">
+                <User className="mr-2 h-4 w-4" />
+                Profile
+              </span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => signOut({ callbackUrl: "/login" })}
               variant="destructive"
             >
-              <LogOut className="mr-2 h-4 w-4" />
-              Logout
+              <span className="flex items-center w-full">
+                <LogOut className="mr-2 h-4 w-4" />
+                Logout
+              </span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
