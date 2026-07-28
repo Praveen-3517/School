@@ -67,7 +67,7 @@ export function AdminTopbar({ user }: AdminTopbarProps) {
           >
             <Avatar className="h-7 w-7">
               <AvatarFallback className="text-xs bg-primary/10 text-primary">
-                {user.name.charAt(0).toUpperCase()}
+                {(user.name || "A").charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <div className="hidden sm:block text-left">

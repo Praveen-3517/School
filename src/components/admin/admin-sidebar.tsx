@@ -237,7 +237,7 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
         <div className="border-t border-sidebar-border p-4 flex items-center justify-between">
           <div className="flex items-center gap-3 min-w-0">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-sidebar-accent text-xs font-semibold text-sidebar-accent-foreground shrink-0">
-              {user.name.charAt(0).toUpperCase()}
+              {(user.name || "A").charAt(0).toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-medium text-sidebar-foreground truncate">
