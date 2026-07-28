@@ -65,14 +65,16 @@ export function AdminTopbar({ user }: AdminTopbarProps) {
               />
             }
           >
-            <Avatar className="h-7 w-7">
-              <AvatarFallback className="text-xs bg-primary/10 text-primary">
-                {(user.name || "A").charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <div className="hidden sm:block text-left">
-              <p className="text-sm font-medium leading-none">{user.name}</p>
-              <p className="text-xs text-muted-foreground mt-0.5">{user.role}</p>
+            <div className="flex items-center gap-2">
+              <Avatar className="h-7 w-7">
+                <AvatarFallback className="text-xs bg-primary/10 text-primary">
+                  {(user.name || "A").charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <div className="hidden sm:block text-left">
+                <p className="text-sm font-medium leading-none">{user.name}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">{user.role}</p>
+              </div>
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
