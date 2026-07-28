@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
+import ImageUpload from "@/components/ui/image-upload";
 
 export function StudentForm({ 
   initialData,
@@ -50,6 +51,7 @@ export function StudentForm({
       dateOfBirth: "",
       bloodGroup: "",
       aadharNumber: "",
+      photoUrl: "",
       address: "",
       guardianName: "",
       guardianRelation: "",
@@ -99,6 +101,23 @@ export function StudentForm({
             <CardDescription>Basic information about the student.</CardDescription>
           </CardHeader>
           <CardContent className="grid gap-6 md:grid-cols-2">
+            <FormField
+              control={form.control}
+              name="photoUrl"
+              render={({ field }) => (
+                <FormItem className="md:col-span-2">
+                  <FormLabel>Student Photo</FormLabel>
+                  <FormControl>
+                    <ImageUpload 
+                      value={field.value || ""} 
+                      onChange={field.onChange} 
+                      disabled={isSubmitting} 
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="firstName"

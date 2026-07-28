@@ -23,6 +23,7 @@ export async function createStudent(data: StudentFormValues) {
     const email = parsed.data.email || `__HIDDEN_EMAIL__${Date.now()}@school.local`;
     const phone = parsed.data.phone || null;
     const aadharNumber = parsed.data.aadharNumber || null;
+    const photoUrl = parsed.data.photoUrl || null;
     const dateOfBirth = parsed.data.dateOfBirth ? new Date(parsed.data.dateOfBirth) : new Date("2010-01-01");
     const bloodGroup = parsed.data.bloodGroup || "UNKNOWN";
     const address = parsed.data.address || null;
@@ -82,6 +83,7 @@ export async function createStudent(data: StudentFormValues) {
           bloodGroup,
           phone,
           aadharNumber,
+          photoUrl,
           address,
         },
       });

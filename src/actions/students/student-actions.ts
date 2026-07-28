@@ -222,6 +222,7 @@ export async function updateStudentAction(
             gender: validated.data.gender,
             bloodGroup: validated.data.bloodGroup,
             phone: validated.data.phone,
+            photoUrl: (data as any).photoUrl,
             address: validated.data.address,
             city: validated.data.city,
             state: validated.data.state,

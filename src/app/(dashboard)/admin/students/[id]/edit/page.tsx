@@ -58,6 +58,7 @@ export default async function EditStudentPage(props: EditStudentPageProps) {
     phone: student.profile.phone || "",
     dateOfBirth: student.profile.dateOfBirth.toISOString().split('T')[0],
     bloodGroup: student.profile.bloodGroup || "",
+    photoUrl: student.profile.photoUrl || "",
     address: student.profile.address || "",
     guardianName: student.guardian.fatherName || student.guardian.guardianName || "",
     guardianRelation: student.guardian.relationship || "Father",
