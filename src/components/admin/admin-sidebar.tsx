@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
+import Image from "next/image";
 import {
-  GraduationCap,
   LayoutDashboard,
   Users,
   UserCheck,
@@ -196,13 +196,13 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
     >
       {/* Logo */}
       <div className="flex h-16 items-center gap-3 px-4 border-b border-sidebar-border">
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-sidebar-primary">
-          <GraduationCap className="h-5 w-5 text-sidebar-primary-foreground" />
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-sidebar-primary overflow-hidden">
+          <Image src="/logo.jpg" alt="Logo" width={32} height={32} className="object-cover w-full h-full" />
         </div>
         {!isCollapsed && (
           <div className="flex-1 min-w-0">
-            <p className="font-semibold text-sm truncate text-sidebar-foreground">
-              {process.env.NEXT_PUBLIC_APP_NAME ?? "EduManage"}
+            <p className="font-semibold text-[13px] leading-tight text-sidebar-foreground">
+              Rahul Sankrityayan Vidyalay
             </p>
             <p className="text-xs text-sidebar-foreground/50">Admin Portal</p>
           </div>
